@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "options": {
+    "cwd": "${workspaceRoot}"
+  },
+  "tasks": [
+    {
+      "label": "iirose_build",
+      "type": "shell",
+      "command": "npm run build"
+    },
+    {
+      "label": "add_description",
+      "type": "shell",
+      "command": "node .//addDescription.js"
+    },
+    {
+      "label": "generate_script",
+      "type": "shell",
+      "dependsOn": [ // 依赖的任务
+        "iirose_build",
+        "add_description"
+      ],
+      "dependsOrder": "sequence", // 代表是依次执行，不设置会并行执行
+      "problemMatcher": []
+    }
+  ]
+}
