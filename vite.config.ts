@@ -9,15 +9,15 @@ export default defineConfig({
   build: {
     minify: 'terser',
     terserOptions: {
+      // 删除所有注释，包括 license 注释
       format: {
-        // 删除所有注释，包括 license 注释
         comments: true
       },
 
+      // 删除命令台输出
       compress: {
-        // 删除命令台输出
-        // drop_console: true,
-        // drop_debugger: true,
+        drop_console: true,
+        drop_debugger: true,
       }
     },
     rollupOptions: {
