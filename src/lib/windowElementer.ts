@@ -77,16 +77,16 @@ function createFabrcWindow(id: string, width: number, workspaceTag: string = 'di
     offsetX = e.clientX - fabricWindow.offsetLeft;
     offsetY = e.clientY - fabricWindow.offsetTop;
     (dragging == false) && (dragging = true);
-    fabricAPI.messageContext.document!.onmousemove = (e) => {
+    document.onmousemove = (e) => {
       if (dragging) {
         fabricWindow.style.left = `${e.clientX - offsetX}px`;
         fabricWindow.style.top = `${e.clientY - offsetY}px`;
       }
     }
-    fabricAPI.messageContext.document!.onmouseup = () => {
+    document.onmouseup = () => {
       console.log('抬起');
       dragging && (dragging = false);
-      fabricAPI.messageContext.document!.onmousemove = null
+      document.onmousemove = null
     }
   }
   // 拖拽功能适配移动端
@@ -95,16 +95,16 @@ function createFabrcWindow(id: string, width: number, workspaceTag: string = 'di
     offsetX = e.touches[0].clientX - fabricWindow.offsetLeft;
     offsetY = e.touches[0].clientY - fabricWindow.offsetTop;
     (dragging == false) && (dragging = true);
-    fabricAPI.messageContext.document!.ontouchmove = (e) => {
+    document.ontouchmove = (e) => {
       if (dragging) {
         fabricWindow.style.left = `${e.touches[0].clientX - offsetX}px`;
         fabricWindow.style.top = `${e.touches[0].clientY - offsetY}px`;
       }
     }
-    fabricAPI.messageContext.document!.ontouchend = () => {
+    document!.ontouchend = () => {
       console.log('抬起');
       dragging && (dragging = false);
-      fabricAPI.messageContext.document!.onmousemove = null
+      document.onmousemove = null
     }
 
   }
@@ -170,6 +170,7 @@ function turnDisplay(ele: HTMLElement) {
  * @param num 要添加到哪个子元素（下标）之前，null表示添加到父元素的子元素列表最后
  */
 function insertMenu(Menu: HTMLElement, items: HTMLElement[], num: number, isbefore: boolean) {
+  // 将二级菜单合并在一起。
   let functionItemBox: HTMLElement = createItem('div', undefined, 'functionItemBox');
   for (let i = 0; i < items.length; i++) {
     console.log('插入元素', i, items[i]);
@@ -179,7 +180,7 @@ function insertMenu(Menu: HTMLElement, items: HTMLElement[], num: number, isbefo
     turnDisplay(functionItemBox);
   });
   // 更新列表
-  fabricAPI.someElements.functionButtonGroupList = [...fabricAPI.messageContext.document!.querySelectorAll('.functionButton.functionButtonGroup')];
+  fabricAPI.someElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
   if (isbefore) {
     console.log('添加菜单', Menu);
     fabricAPI.someElements.functionButtonGroupList![num].before(Menu);
@@ -188,6 +189,8 @@ function insertMenu(Menu: HTMLElement, items: HTMLElement[], num: number, isbefo
     fabricAPI.someElements.functionButtonGroupList![num].after(functionItemBox);
     fabricAPI.someElements.functionButtonGroupList![num].after(Menu);
   }
+  // 插入完成后也更新一下
+  fabricAPI.someElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
 }
 
 // function createConfirmationBox(id: string, title: string, descriotion: string, buttonList: Element[]) {

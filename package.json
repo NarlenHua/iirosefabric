@@ -4,11 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "generate_script": "npm run iirose_build && npm run add_description",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "iirose_build": "npm run build",
+    "add_description": "node .//addDescription.js"
   },
   "devDependencies": {
+    "@types/node": "^20.14.10",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
   },

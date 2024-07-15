@@ -17,11 +17,11 @@
     {
       "label": "generate_script",
       "type": "shell",
-      "dependsOn": [ // 依赖的任务
+      "dependsOn": [
         "iirose_build",
         "add_description"
       ],
-      "dependsOrder": "sequence", // 代表是依次执行，不设置会并行执行
+      "dependsOrder": "sequence",
       "problemMatcher": []
     }
   ]

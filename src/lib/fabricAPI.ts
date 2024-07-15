@@ -1,3 +1,5 @@
+// @ts-ignore
+import { config } from '../../config';
 import { TinyEmitter } from 'tiny-emitter'
 import { MessageClass } from "./message";
 import { decoder } from './decoder'
@@ -5,14 +7,13 @@ import { encoder } from './encoder'
 import { windowElementer } from './windowElementer'
 import { fabricSVG } from '../static/svg/fabricSVG'
 import { init } from './init'
+
 /**
  * 定义了接口
  */
 export interface FabricAPI {
   version: string,
   init: {
-    sleep: (...param: any[]) => any,
-    initContext: (...param: any[]) => any,
     initSocket: (...param: any[]) => any,
     initStyle: (...param: any[]) => any,
     initMainWindow: (...param: any[]) => any,
@@ -36,17 +37,7 @@ export interface FabricAPI {
     openElement: (...param: any[]) => any,
     turnDisplay: (...param: any[]) => any,
     insertMenu: (...param: any[]) => any,
-  },
-  topcontext: {
-    iframe?: HTMLIFrameElement,
-    window?: Window,
-    document?: Document,
-  },
-  messageContext: {
-    iframe?: HTMLIFrameElement,
-    window?: Window,
-    document?: Document,
-  },
+  }
   socket: {
     beforeSend?: (param: string) => any,
     afterSend?: (param: string) => any,
@@ -67,7 +58,7 @@ export interface FabricAPI {
  * 
  */
 export const fabricAPI: FabricAPI = {
-  version: '0.0.1',
+  version: config.version,
   init: init,
   emitter: new TinyEmitter(),
   MessageClass: {
@@ -79,8 +70,6 @@ export const fabricAPI: FabricAPI = {
   decoder: decoder,
   fabricSVG: fabricSVG,
   windowElementer: windowElementer,
-  topcontext: {},
-  messageContext: {},
   socket: {},
   someElements: {}
 }

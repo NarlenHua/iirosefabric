@@ -16,8 +16,8 @@ export default defineConfig({
 
       compress: {
         // 删除命令台输出
-        drop_console: true,
-        drop_debugger: true,
+        // drop_console: true,
+        // drop_debugger: true,
       }
     },
     rollupOptions: {
