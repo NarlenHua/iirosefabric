@@ -1,0 +1,10 @@
+export const fabricStyle = {
+    'fabricCSS': '.fabric-window{position:absolute;z-index:1000;background-color:#c4d7d6;box-shadow:3px 3px 2px 1px #12aa9c}.fabric-window-menubar{display:flex;flex-direction:row;height:3%;width:100%;background-color:#57c3c2}.fabric-window-menubartitle{text-align:center;height:100%;width:90%;color:#000;background-color:#12aa9c;cursor:move}.fabric-window-menubarbutton{margin:1px;height:100%;width:2.5%;background-color:#428675;cursor:pointer}.fabric-window-workspace{height:97%;width:100%}.icon{width:100%;width:100%}',
+    'class': {
+        'fabric-window': 'fabric-window',
+        'fabric-window-menubar': 'fabric-window-menubar',
+        'fabric-window-menubartitle': 'fabric-window-menubartitle',
+        'fabric-window-menubarbutton': 'fabric-window-menubarbutton',
+        'fabric-window-workspace': 'fabric-window-workspace'
+    }
+} 

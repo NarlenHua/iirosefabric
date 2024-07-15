@@ -1,0 +1,24 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Fabric texture background pattern -->
+    <defs>
+        <pattern id="fabricPattern" width="10" height="10" patternUnits="userSpaceOnUse">
+            <rect width="10" height="10" fill="#F0E6D8" />
+            <line x1="0" y1="0" x2="10" y2="10" stroke="#C1A89B" stroke-width="1" />
+            <line x1="10" y1="0" x2="0" y2="10" stroke="#C1A89B" stroke-width="1" />
+        </pattern>
+    </defs>
+
+    <!-- Apply the fabric texture to the background -->
+    <rect width="100%" height="100%" fill="url(#fabricPattern)" />
+
+    <!-- Fabric shaped rectangle -->
+    <rect x="50" y="50" width="200" height="100" rx="10" ry="10" fill="url(#fabricPattern)" stroke="#C1A89B"
+        stroke-width="2" />
+
+    <!-- Sewing thread details -->
+    <line x1="70" y1="70" x2="230" y2="70" stroke="#A52A2A" stroke-width="2" />
+    <line x1="70" y1="130" x2="230" y2="130" stroke="#A52A2A" stroke-width="2" />
+    <line x1="150" y1="60" x2="150" y2="140" stroke="#A52A2A" stroke-width="2" />
+</svg>

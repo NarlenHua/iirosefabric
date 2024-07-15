@@ -1,0 +1,48 @@
+/* 位置属性(position, top, right, z-index, display, float等)
+大小(width, height, padding, margin)
+文字系列(font, line-height, letter-spacing, color- text-align等)
+背景(background, border等)
+其他(animation, transition等) */
+
+.fabric-window {
+    position: absolute;
+    z-index: 1000;
+    background-color: #c4d7d6;
+    /* border-radius: 0px 0px 10px 10px; */
+    box-shadow: 3px 3px 2px 1px #12aa9c;
+}
+
+.fabric-window-menubar {
+    display: flex;
+    flex-direction: row;
+    height: 3%;
+    width: 100%;
+    background-color: #57c3c2;
+}
+
+.fabric-window-menubartitle {
+    text-align: center;
+    height: 100%;
+    width: 90%;
+    color: black;
+    background-color: #12aa9c;
+    cursor: move;
+}
+
+.fabric-window-menubarbutton {
+    margin: 1px;
+    height: 100%;
+    width: 2.5%;
+    background-color: #428675;
+    cursor: pointer;
+}
+
+.fabric-window-workspace {
+    height: 97%;
+    width: 100%;
+}
+
+.icon {
+    width: 100%;
+    width: 100%;
+}
