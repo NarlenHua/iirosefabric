@@ -176,6 +176,8 @@ function insertMenu(Menu: HTMLElement, items: HTMLElement[], num: number, isbefo
     console.log('插入元素', i, items[i]);
     functionItemBox.append(items[i]);
   }
+  // 把二级菜单关上
+  closeElement(functionItemBox);
   Menu.addEventListener('click', () => {
     turnDisplay(functionItemBox);
   });

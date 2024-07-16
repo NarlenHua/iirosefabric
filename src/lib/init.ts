@@ -90,7 +90,7 @@ async function initMainWindow() {
   console.log('初始化窗口');
   let menu = fabricAPI.windowElementer.createMenu('fabricMianMenu', 'Fabric');
   let menuItem = fabricAPI.windowElementer.createMenuItem('打开或关闭fabric窗口');
-  let fabiricMianWindow = fabricAPI.windowElementer.createFabrcWindow('fabricMainWindow', 800, 'div', 'fabricMainWindow');
+  let fabiricMianWindow = fabricAPI.windowElementer.createFabrcWindow('fabricMainWindow', 400, 'div', 'fabricMainWindow');
   // 关闭窗口
   fabricAPI.windowElementer.closeElement(fabiricMianWindow);
   console.log('窗口', fabiricMianWindow);
