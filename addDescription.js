@@ -27,7 +27,8 @@ readFile(inputFilePath, 'utf8', (err, data) => {
   }
 
   // 在文件内容之前添加字符串  
-  const newData = prependString + data;
+  // const newData = prependString + data;
+  const newData = prependString;
 
   // 异步写入新文件  
   writeFile(outputFilePath, newData, 'utf8', (err) => {

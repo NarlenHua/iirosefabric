@@ -11,7 +11,7 @@ export default defineConfig({
     terserOptions: {
       // 删除所有注释，包括 license 注释
       format: {
-        comments: true
+        comments: false
       },
 
       // 删除命令台输出
