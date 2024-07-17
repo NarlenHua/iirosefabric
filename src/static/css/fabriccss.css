@@ -38,6 +38,7 @@
 }
 
 .fabric-window-workspace {
+    overflow: scroll;
     height: calc(100% - 20px);
     width: 100%;
 }

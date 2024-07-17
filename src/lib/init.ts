@@ -93,6 +93,7 @@ async function initMainWindow() {
   let menuItem = fabricAPI.windowElementer.createMenuItem('打开或关闭fabric窗口');
   // 工作区
   let workSpace: HTMLElement = fabricAPI.windowElementer.createItem('div', `fabricMainWindow-workspace`, fabricStyle.class["fabric-window-workspace"])
+  workSpace.innerHTML = '<h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1>'
   let fabiricMianWindow = fabricAPI.windowElementer.createFabrcWindow('fabricMainWindow', 400, workSpace, 'fabricMainWindow');
   // 关闭窗口
   fabricAPI.windowElementer.closeElement(fabiricMianWindow);
