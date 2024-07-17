@@ -20,17 +20,17 @@ function createItem(tag: string = 'div', id?: string, className?: string, textCo
 /**
  * @param id 窗口id
  * @param width 窗口宽
- * @param workspaceTag 标签类型
+ * @param workSpace 工作区元素
  * @param title 标题
  * @param height 窗口高
  * @returns 
  */
-function createFabrcWindow(id: string, width: number, workspaceTag: string = 'div', title?: string, height?: number): HTMLElement {
+function createFabrcWindow(id: string, width: number, workSpace: HTMLElement = createItem('div', `${id}-workspace`, fabricStyle.class["fabric-window-workspace"]), title?: string, height?: number): HTMLElement {
   // 最外层窗口       
   let fabricWindow = createItem('div', id, fabricStyle.class["fabric-window"]);
   fabricWindow.style.width = width.toString() + 'px';
   if (height == undefined) fabricWindow.style.height = (width / 4 * 3).toString() + 'px';
-  else fabricWindow.style.height = height.toString + 'px';
+  else fabricWindow.style.height = (height + 20).toString + 'px';
   // 菜单栏
   let menubar = createItem('div');
   menubar.classList.add(fabricStyle.class["fabric-window-menubar"]);
@@ -52,7 +52,7 @@ function createFabrcWindow(id: string, width: number, workspaceTag: string = 'di
   closeButton.classList.add(fabricStyle.class["fabric-window-menubarbutton"]);
   closeButton.innerHTML = fabricSVG.close;
   // 工作区
-  let workSpace = createItem(workspaceTag, `${id}-workspace`, fabricStyle.class["fabric-window-workspace"]);
+  // let workSpace = createItem(workspaceTag, `${id}-workspace`, fabricStyle.class["fabric-window-workspace"]);
   // 添加按键功能
   minimizeButton.addEventListener('click', () => {
     closeElement(fabricWindow);
@@ -104,11 +104,11 @@ function createFabrcWindow(id: string, width: number, workspaceTag: string = 'di
     document!.ontouchend = () => {
       console.log('抬起');
       dragging && (dragging = false);
-      document.onmousemove = null
+      document.onmousemove = null;
     }
 
   }
-  return fabricWindow
+  return fabricWindow;
 }
 /**
  * 创建一个一级菜单

@@ -11,7 +11,7 @@ import { fabricStyle } from "../static/css/fabricCSS";
 async function initSocket() {
   console.log('代理网络');
   // @ts-ignore
-  if (socket == undefined){
+  if (socket == undefined) {
     console.error("socket不存在！");
     return false;
   }
@@ -61,7 +61,7 @@ async function initSocket() {
   if (socket) {
     console.log('网络代理成功！');
     return true;
-  }else {
+  } else {
     console.error("socket不存在！");
     return false;
   }
@@ -88,9 +88,12 @@ async function initStyle(id: string, css: string) {
 
 async function initMainWindow() {
   console.log('初始化窗口');
+  // 一级菜单二级菜单
   let menu = fabricAPI.windowElementer.createMenu('fabricMianMenu', 'Fabric');
   let menuItem = fabricAPI.windowElementer.createMenuItem('打开或关闭fabric窗口');
-  let fabiricMianWindow = fabricAPI.windowElementer.createFabrcWindow('fabricMainWindow', 400, 'div', 'fabricMainWindow');
+  // 工作区
+  let workSpace: HTMLElement = fabricAPI.windowElementer.createItem('div', `fabricMainWindow-workspace`, fabricStyle.class["fabric-window-workspace"])
+  let fabiricMianWindow = fabricAPI.windowElementer.createFabrcWindow('fabricMainWindow', 400, workSpace, 'fabricMainWindow');
   // 关闭窗口
   fabricAPI.windowElementer.closeElement(fabiricMianWindow);
   console.log('窗口', fabiricMianWindow);

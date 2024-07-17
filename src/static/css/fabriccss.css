@@ -9,13 +9,13 @@
     z-index: 1000;
     background-color: #c4d7d6;
     /* border-radius: 0px 0px 10px 10px; */
-    box-shadow: 3px 3px 2px 1px #12aa9c;
+    box-shadow: 3px 3px 2px 1px #0f776d;
 }
 
 .fabric-window-menubar {
     display: flex;
     flex-direction: row;
-    height: 3%;
+    height: 20px;
     width: 100%;
     background-color: #57c3c2;
 }
@@ -23,7 +23,7 @@
 .fabric-window-menubartitle {
     text-align: center;
     height: 100%;
-    width: 90%;
+    width: calc(100% - 80px);
     color: black;
     background-color: #12aa9c;
     cursor: move;
@@ -31,14 +31,14 @@
 
 .fabric-window-menubarbutton {
     margin: 1px;
-    height: 100%;
-    width: 2.5%;
+    height: 19px;
+    width: 19px;
     background-color: #428675;
     cursor: pointer;
 }
 
 .fabric-window-workspace {
-    height: 97%;
+    height: calc(100% - 20px);
     width: 100%;
 }
 
