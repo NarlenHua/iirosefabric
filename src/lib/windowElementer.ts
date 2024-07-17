@@ -19,25 +19,24 @@ function createItem(tag: string = 'div', id?: string, className?: string, textCo
 }
 /**
  * @param id 窗口id
- * @param width 窗口宽
- * @param workSpace 工作区元素
  * @param title 标题
+ * @param workSpace 工作区元素
+ * @param width 窗口宽
  * @param height 窗口高
  * @returns 
  */
-function createFabrcWindow(id: string, width: number, workSpace: HTMLElement = createItem('div', `${id}-workspace`, fabricStyle.class["fabric-window-workspace"]), title?: string, height?: number): HTMLElement {
+function createFabrcWindow(id: string, width: number, workSpace: HTMLElement = createItem('div', `${id}-workspace`, fabricStyle.class["fabric-window-workspace"]), title: string = id, height: number = width / 4 * 3) {
   // 最外层窗口       
   let fabricWindow = createItem('div', id, fabricStyle.class["fabric-window"]);
-  fabricWindow.style.width = width.toString() + 'px';
-  if (height == undefined) fabricWindow.style.height = (width / 4 * 3).toString() + 'px';
-  else fabricWindow.style.height = (height + 20).toString + 'px';
+  fabricWindow.style.width = `${width}px`;
+  fabricWindow.style.height = `${height + 20}px`;
   // 菜单栏
   let menubar = createItem('div');
   menubar.classList.add(fabricStyle.class["fabric-window-menubar"]);
   // 标题栏
   let menubarTitle = createItem('div');
   menubarTitle.classList.add(fabricStyle.class["fabric-window-menubartitle"]);
-  (title == undefined) || (menubarTitle.textContent = title);
+  menubarTitle.textContent = title;
   // 按键
   let minimizeButton = createItem('div');
   minimizeButton.classList.add(fabricStyle.class["fabric-window-menubarbutton"]);
@@ -108,6 +107,9 @@ function createFabrcWindow(id: string, width: number, workSpace: HTMLElement = c
     }
 
   }
+
+  fabricWindow.style.left = `${window.innerWidth - width / 2}px`;
+  fabricWindow.style.top = `${(window.innerHeight - height + 20) / 2}px`;
   return fabricWindow;
 }
 /**
