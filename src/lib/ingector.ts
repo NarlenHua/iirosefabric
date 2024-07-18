@@ -58,6 +58,7 @@ function runBegain() {
       document.body.append(jsTemp);
     }
 }
+
 function runEnd() {
   // 注入js
   let temp = localStorage.getItem(`externalResources0`);

@@ -88,7 +88,8 @@ async function initMainWindow() {
   let workSpace: HTMLElement = windowElementer.createItem('div', `fabricMainWindow-workspace`, fabricStyle.class["fabric-window-workspace"]);
   let openButton = windowElementer.createItem('button', undefined, undefined, '打开调试工具');
   let closeButton = windowElementer.createItem('button', undefined, undefined, '关闭调试工具');
-  workSpace.append(openButton, closeButton);
+  let dis = windowElementer.createItem('p', undefined, undefined, '具备调试修复功能，当因为网络等原因无法进入时，可以点击在右下角打开调试工具，运行"iirosesave()"将保存存档，运行"iiroserepair()"将尝试修复程序，修复后重载可能可以进入,运行"closeconsole()"将关闭调试工具。');
+  workSpace.append(openButton, closeButton, dis);
   let fabiricMianWindow = windowElementer.createFabrcWindow('fabricMainWindow', 400, workSpace);
   // 关闭窗口
   windowElementer.closeElement(fabiricMianWindow);
