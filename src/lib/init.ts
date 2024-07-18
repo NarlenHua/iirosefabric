@@ -1,8 +1,9 @@
 import { fabricAPI } from "./fabricAPI";
 import { decoder } from "./decoder";
+import { fabricStyle } from "./fabricStyle";
+// import { erudatool } from "./eruadtool";
+import { ingector } from "./ingector";
 import { windowElementer } from "./windowElementer";
-import { fabricStyle } from "../static/css/fabricCSS";
-
 
 /**
  * 初始化网络代理
@@ -75,43 +76,42 @@ async function initELement() {
   fabricAPI.someElements.functionHolder = document.querySelector('#functionHolder');
   fabricAPI.someElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
 }
-/**
- * 添加样式
- */
-async function initStyle(id: string, css: string) {
-  console.log('添加样式');
-  let st = windowElementer.createItem('style');
-  st.id = id;
-  st.innerHTML = css;
-  document.head.appendChild(st);
-}
 
+// 初始化主窗口
 async function initMainWindow() {
   console.log('初始化窗口');
   // 一级菜单二级菜单
-  let menu = fabricAPI.windowElementer.createMenu('fabricMianMenu', 'Fabric');
-  let menuItem = fabricAPI.windowElementer.createMenuItem('打开或关闭fabric窗口');
+  let menu = windowElementer.createMenu('fabricMianMenu', 'Fabric');
+  let menuItem1 = windowElementer.createMenuItem('fabric设置');
+  let menuItem2 = await ingector.creatIngectorWindow();
   // 工作区
-  let workSpace: HTMLElement = fabricAPI.windowElementer.createItem('div', `fabricMainWindow-workspace`, fabricStyle.class["fabric-window-workspace"])
-  workSpace.innerHTML = '<h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1><h1>这里的文本内容是可以滚动的，滚动条方向是垂直方向。</h1>'
-  let fabiricMianWindow = fabricAPI.windowElementer.createFabrcWindow('fabricMainWindow', 400, workSpace);
+  let workSpace: HTMLElement = windowElementer.createItem('div', `fabricMainWindow-workspace`, fabricStyle.class["fabric-window-workspace"]);
+  let openButton = windowElementer.createItem('button', undefined, undefined, '打开调试工具');
+  let closeButton = windowElementer.createItem('button', undefined, undefined, '关闭调试工具');
+  workSpace.append(openButton, closeButton);
+  let fabiricMianWindow = windowElementer.createFabrcWindow('fabricMainWindow', 400, workSpace);
   // 关闭窗口
-  fabricAPI.windowElementer.closeElement(fabiricMianWindow);
+  windowElementer.closeElement(fabiricMianWindow);
   console.log('窗口', fabiricMianWindow);
-  menuItem.addEventListener('click', () => {
-    fabricAPI.windowElementer.turnDisplay(fabiricMianWindow);
-  });
+  menuItem1.onclick = () => { windowElementer.turnDisplay(fabiricMianWindow); };
   fabricAPI.someElements.movePanelHolder?.appendChild(fabiricMianWindow);
   console.log('移动', fabricAPI.someElements.movePanelHolder);
-  fabricAPI.windowElementer.insertMenu(menu, [menuItem], 0, true);
+  windowElementer.insertMenu(menu, [menuItem1, menuItem2], 0, true);
 }
+
 
 /**
  * Fabric初始化
  */
 async function initFabricAPI() {
+  // 注入之前的运行脚本
+  // await ingector.replacejQuery();
+  await ingector.replaceHTML();
+  // alert("注入成功");
   await initSocket();
-  initStyle('fabricStyle', fabricStyle.fabricCSS);
+  // 注入样式
+  fabricStyle.addStyle('fabricStyle', fabricStyle.fabricCSS);
+  fabricStyle.addStyle('ingectorStyle', ingector.ingectorStyle.ingectorCSS);
   initELement();
   initMainWindow();
   // 将接口注入到环境中
@@ -119,12 +119,13 @@ async function initFabricAPI() {
   window.fabricAPI = fabricAPI;
   // @ts-ignore
   window.top.fabricAPI = fabricAPI;
+  // 运行外部脚本
+  ingector.runEnd();
 }
 
 export const init = {
   initSocket,
   initELement,
-  initStyle,
   initMainWindow,
   initFabricAPI
 }

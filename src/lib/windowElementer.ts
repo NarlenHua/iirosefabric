@@ -1,6 +1,6 @@
 import { fabricAPI } from "./fabricAPI"
-import { fabricStyle } from "../static/css/fabricCSS"
-import { fabricSVG } from "../static/svg/fabricSVG";
+import { fabricStyle } from "./fabricStyle"
+import { fabricSVG } from "./fabricSVG";
 
 /**
  * 创建标签
@@ -108,7 +108,7 @@ function createFabrcWindow(id: string, width: number, workSpace: HTMLElement = c
 
   }
 
-  fabricWindow.style.left = `${window.innerWidth - width / 2}px`;
+  fabricWindow.style.left = `${(window.innerWidth - width) / 2}px`;
   fabricWindow.style.top = `${(window.innerHeight - height + 20) / 2}px`;
   return fabricWindow;
 }
@@ -170,6 +170,7 @@ function turnDisplay(ele: HTMLElement) {
  * @param Menu 一级菜单元素
  * @param items 二级菜单元素列表
  * @param num 要添加到哪个子元素（下标）之前，null表示添加到父元素的子元素列表最后
+ * @param isbefore 是否添加到前面
  */
 function insertMenu(Menu: HTMLElement, items: HTMLElement[], num: number, isbefore: boolean) {
   // 将二级菜单合并在一起。

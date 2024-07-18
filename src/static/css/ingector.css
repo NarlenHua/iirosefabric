@@ -1,0 +1,32 @@
+.ingector-table {
+    background-color: #cd9f9f;
+    width: 100%;
+    table-layout: fixed;
+    text-align: center
+}
+
+.ingector-title {
+    background-color: #bb9999;
+}
+
+.ingector-linkname {
+    background-color: #ffd0d0;
+}
+
+.ingector-link {
+    background-color: #fdb8b8;
+}
+
+.ingector-choice {
+    background-color: #ff9f9f;
+}
+
+.ingector-table input {
+    width: 90%;
+    text-align: center;
+}
+
+.ingector-table button {
+    width: 90%;
+    text-align: center;
+}

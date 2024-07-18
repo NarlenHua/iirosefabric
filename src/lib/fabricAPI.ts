@@ -1,11 +1,12 @@
+import { TinyEmitter } from 'tiny-emitter';
+// import eruda, { Eruda } from "eruda";
 // @ts-ignore
 import { config } from '../../config';
-import { TinyEmitter } from 'tiny-emitter'
 import { MessageClass } from "./message";
 import { decoder } from './decoder'
 import { encoder } from './encoder'
 import { windowElementer } from './windowElementer'
-import { fabricSVG } from '../static/svg/fabricSVG'
+import { fabricSVG } from './fabricSVG'
 import { init } from './init'
 
 /**
@@ -15,7 +16,6 @@ export interface FabricAPI {
   version: string,
   init: {
     initSocket: (...param: any[]) => any,
-    initStyle: (...param: any[]) => any,
     initMainWindow: (...param: any[]) => any,
     initFabricAPI: (...param: any[]) => any,
   },
@@ -52,7 +52,8 @@ export interface FabricAPI {
     movePanelHolder?: Element | null,
     functionHolder?: Element | null,
     functionButtonGroupList?: Element[],
-  }
+  },
+  fabricStyle: {}
 }
 /**
  * 
@@ -71,5 +72,6 @@ export const fabricAPI: FabricAPI = {
   fabricSVG: fabricSVG,
   windowElementer: windowElementer,
   socket: {},
-  someElements: {}
+  someElements: {},
+  fabricStyle: {}
 }
