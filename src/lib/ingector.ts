@@ -43,7 +43,7 @@ function runBegain() {
   // @ts-ignore
   window.closeconsole = () => { eruda.destroy(); };
   // 注入js
-  let temp = localStorage.getItem(`externalResources0`);
+  let temp = localStorage.getItem(`externalResources2`);
   let data: [string, string, number][] = [];
   if (temp == null) return;
   else {
@@ -241,7 +241,7 @@ async function createTable(tableType: number, writeButton: HTMLElement, readButt
   readButton.onclick = () => {
     let temp = localStorage.getItem(`externalResources${tableType}`)
     let data: [string, string, number][] = [];
-    if (temp == null) return;
+    if (temp == null) data = [];
     else {
       data = JSON.parse(temp);
       console.log(data);
@@ -287,11 +287,11 @@ async function creatIngectorWindow() {
   let disc = windowElementer.createItem('p', undefined, undefined, '使用方法,设置选项后并不会立刻保存，需点击写入才可以，所有资源下载进入才能加载。可以设置三种状态，删除将会在写入后移除，保存会在写入后保存在本地，禁用将不会启动。写入是将当前设置的写入到本地，这样设置的才起作用。');
   let disc0 = windowElementer.createItem('p', undefined, undefined, '大多数js脚本都可以使用这个，它运行在界面加载后。');
   let disc1 = windowElementer.createItem('p', undefined, undefined, '大多数css文件都可以使用这个，它的加载也在界面加载后。');
-  let disc2 = windowElementer.createItem('p', undefined, undefined, '下面设置的脚本，在界面加载时会运行，它在下次启动后会写入到缓存，即使删掉fabric也依旧会运行。');
+  let disc2 = windowElementer.createItem('p', undefined, undefined, '下面设置的脚本，在界面加载时会运行，它在下次启动后会写入到缓存，即使删掉fabric也依旧会运行，这里的脚本下下次启动才能运行。');
   workSpace.append(disc, disc0, table0, disc1, table1, disc2, table2);
   let fabiricMianWindow = windowElementer.createFabrcWindow('ingectorjsWindow', 300, workSpace, '设置注入的资源', 400);
   // 关闭窗口
-  // windowElementer.closeElement(fabiricMianWindow);
+  windowElementer.closeElement(fabiricMianWindow);
   console.log('窗口', fabiricMianWindow);
   menuItem.onclick = () => { windowElementer.turnDisplay(fabiricMianWindow); };
   fabricAPI.someElements.movePanelHolder?.appendChild(fabiricMianWindow);
