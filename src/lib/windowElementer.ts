@@ -19,9 +19,9 @@ function createItem(tag: string = 'div', id?: string, className?: string, textCo
 }
 /**
  * @param id 窗口id
- * @param title 标题
- * @param workSpace 工作区元素
  * @param width 窗口宽
+ * @param workSpace 工作区元素
+ * @param title 标题
  * @param height 窗口高
  * @returns 
  */

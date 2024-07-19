@@ -6,16 +6,21 @@ import { ingector } from "./ingector";
 import { windowElementer } from "./windowElementer";
 
 /**
+   * 异步延时函数
+   * @param {时间毫秒} ms
+   */
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
  * 初始化网络代理
  * @returns 返回初始化是否成功
  */
 async function initSocket() {
   console.log('代理网络');
-  // @ts-ignore
-  if (socket == undefined) {
-    console.error("socket不存在！");
-    return false;
-  }
+  // 等待一下
+  await sleep(500);
   // 发送
   // @ts-ignore
   fabricAPI.socket.originalSend = socket.send;
@@ -128,6 +133,8 @@ async function initFabricAPI() {
   window.top.fabricAPI = fabricAPI;
   // 运行外部脚本
   ingector.runEnd();
+  // @ts-ignore
+  _alert("Fabric注入成功")
 }
 
 export const init = {

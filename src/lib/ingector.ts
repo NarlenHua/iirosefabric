@@ -32,16 +32,46 @@ function runBegain() {
   er.src = "https://cdn.bootcdn.net/ajax/libs/eruda/3.1.0/eruda.min.js";
   document.body.append(er);
   // @ts-ignore
-  er.onload = () => { eruda.init(); eruda.position({ x: window.innerWidth - 20, y: window.innerHeight - 20 }); }
+  er.onload = () => { eruda.init(); eruda.position({ x: window.innerWidth - 100, y: window.innerHeight - 50 }); }
   // 把保存、退出、尝试修复函数注入到环境中
   // @ts-ignore
   window.iirosesave = () => { Probe.init.pako || (Probe.init.pako = 1, Utils.getScript("lib/js/app/server/pako.js")); try { Utils.service.saveStatus(0) } catch (e) { sendBug(e, "saveStatus") } for (var t, o = {}, i = 0, a = localStorage.length; i < a; ++i)o[t = localStorage.key(i)] = localStorage.getItem(t); var e = JSON.stringify(o), s = new Date, s = [s.getFullYear(), Utils.smallTools.zeroFill(s.getMonth() + 1), Utils.smallTools.zeroFill(s.getDate())].join("-") + "_" + [Utils.smallTools.zeroFill(s.getHours()), Utils.smallTools.zeroFill(s.getMinutes()), Utils.smallTools.zeroFill(s.getSeconds())].join("-"), r = uid + "_" + s + ".bak.iirose", s = pako.gzip(e, { level: 9 }), e = new Uint8Array(s.length + 3); e[0] = 2, e[1] = 33, e[s.length + 2] = 77, e.set(s, 2), e = new Blob([e]), 5 == device ? Utils.blobToDataURL(e, function (e) { Main.saveFile(e, r) }) : Utils.service.downloadBlob(e, r) };
   // @ts-ignore
-  window.iiroserepair = () => { localStorage.removeItem('functionPos'); location.reload(true); }
+  window.iiroserepair = () => {
+    localStorage.removeItem('functionPos');
+    location.reload();
+  }
   // @ts-ignore
   window.openconsole = () => { eruda.init(); };
   // @ts-ignore
   window.closeconsole = () => { eruda.destroy(); };
+  // 监听错误信息
+  /**
+   * 若该函数返回true，则阻止执行默认事件处理函数，如异常信息不会在console中打印。没有返回值或者返回值为false的时候，异常信息会在console中打印
+   * @param message 错误信息（字符串）。可用于HTML onerror=""处理程序中的event。
+   * @param source 发生错误的脚本URL（字符串）
+   * @param lineno 发生错误的行号（数字）
+   * @param colno 发生错误的列号（数字）
+   * @param error Error对象
+   */
+  window.onerror = function (message, source, lineno, colno, error) {
+    console.log(`消息"${message}"`, '错误脚本的链接', source, '错误行号', lineno, '错误列号', colno, '错误对象', error);
+    let judge1 = "TypeError: Cannot read properties of undefined (reading 'lastChild')";
+    let judge2 = "at SocketInit.socket.onopen";
+    console.log(error?.stack?.toString().includes(judge1));
+    console.log(error?.stack?.toString().includes(judge2));
+    if (error?.stack?.toString().includes(judge1) && error?.stack?.toString().includes(judge2)) {
+      if (confirm('检测到错误是否保存存档？')) {
+        // @ts-ignore
+        Probe.init.pako || (Probe.init.pako = 1, Utils.getScript("lib/js/app/server/pako.js")); try { Utils.service.saveStatus(0) } catch (e) { sendBug(e, "saveStatus") } for (var t, o = {}, i = 0, a = localStorage.length; i < a; ++i)o[t = localStorage.key(i)] = localStorage.getItem(t); var e = JSON.stringify(o), s = new Date, s = [s.getFullYear(), Utils.smallTools.zeroFill(s.getMonth() + 1), Utils.smallTools.zeroFill(s.getDate())].join("-") + "_" + [Utils.smallTools.zeroFill(s.getHours()), Utils.smallTools.zeroFill(s.getMinutes()), Utils.smallTools.zeroFill(s.getSeconds())].join("-"), r = uid + "_" + s + ".bak.iirose", s = pako.gzip(e, { level: 9 }), e = new Uint8Array(s.length + 3); e[0] = 2, e[1] = 33, e[s.length + 2] = 77, e.set(s, 2), e = new Blob([e]), 5 == device ? Utils.blobToDataURL(e, function (e) { Main.saveFile(e, r) }) : Utils.service.downloadBlob(e, r)
+      }
+      if (confirm('检测到错误是否尝试修复重载？')) {
+        localStorage.removeItem('functionPos'); location.reload();
+      }
+    }
+    return false;
+  }
+
   // 注入js
   let temp = localStorage.getItem(`externalResources2`);
   let data: [string, string, number][] = [];
@@ -95,12 +125,12 @@ function runEnd() {
       document.head.appendChild(linkTemp);
     }
 }
+
 /**
   * message页面请求拦截注入外部js和函数
   * @param scripturls js外部链接
   * @param functions 函数列表
 */
-
 async function replaceHTML(scripturls?: string[], functions?: Array<() => void>) {
   let message: string = (await (await fetch('https://iirose.com/messages.html?timestamp=new%20Date().getTime()')).text());
   let scriptTemp: string = `<script>${runBegain}${runBegain.name}();</script>`;
@@ -235,7 +265,8 @@ async function createTable(tableType: number, writeButton: HTMLElement, readButt
       }
     }
     localStorage.setItem(`externalResources${tableType}`, JSON.stringify(tableValues));
-    alert('写入完成');
+    // @ts-ignore
+    _alert('写入完成，脚本将在重载后运行');
   }
   // 读取数据
   readButton.onclick = () => {
@@ -254,6 +285,8 @@ async function createTable(tableType: number, writeButton: HTMLElement, readButt
     // 显示读取到的
     for (let i = 0; i < data.length; i++)
       addline(data[i]);
+    // @ts-ignore
+    _alert('已读取本地数据');
   }
   return table;
 }
