@@ -58,8 +58,6 @@ function runBegain() {
     console.log(`消息"${message}"`, '错误脚本的链接', source, '错误行号', lineno, '错误列号', colno, '错误对象', error);
     let judge1 = "TypeError: Cannot read properties of undefined (reading 'lastChild')";
     let judge2 = "at SocketInit.socket.onopen";
-    console.log(error?.stack?.toString().includes(judge1));
-    console.log(error?.stack?.toString().includes(judge2));
     if (error?.stack?.toString().includes(judge1) && error?.stack?.toString().includes(judge2)) {
       if (confirm('检测到错误是否保存存档？')) {
         // @ts-ignore
@@ -201,22 +199,27 @@ async function createTable(tableType: number, writeButton: HTMLElement, readButt
       [name.value, link.value] = [lineValue[0], lineValue[1]];
       switch (lineValue[2]) {
         case 0:
-          choice.innerHTML = '保存';
+          choice.innerHTML = '启用';
+          choice.style.color = 'green';
           break;
         case 1:
           choice.innerHTML = '删除';
+          choice.style.color = 'red';
           break;
         case 2:
           choice.innerHTML = '禁用';
+          choice.style.color = 'black';
           break;
         default:
           choice.innerHTML = '其他';
+          choice.style.color = 'black';
           break;
       }
     } else {
       name.value = `第${tableElements.length + 1}个资源`;
       link.value = '';
-      choice.innerHTML = '保存';
+      choice.innerHTML = '启用';
+      choice.style.color = 'green';
       value = [name.value, link.value, 0];
     }
     // 更换选项
@@ -224,13 +227,16 @@ async function createTable(tableType: number, writeButton: HTMLElement, readButt
       value[2] = (value[2] + 1) >= 3 ? 0 : (value[2] + 1);
       switch (value[2]) {
         case 0:
-          choice.innerHTML = '保存';
+          choice.innerHTML = '启用';
+          choice.style.color = 'green';
           break;
         case 1:
           choice.innerHTML = '删除';
+          choice.style.color = 'red';
           break;
         case 2:
           choice.innerHTML = '禁用';
+          choice.style.color = 'black';
           break;
         default:
           choice.innerHTML = '其他';
