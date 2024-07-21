@@ -91,16 +91,64 @@ async function initMainWindow() {
   let menuItem2 = await ingector.creatIngectorWindow();
   // 工作区
   let workSpace: HTMLElement = windowElementer.createItem('div', `fabricMainWindow-workspace`, fabricStyle.class["fabric-window-workspace"]);
-  let openButton = windowElementer.createItem('button', undefined, undefined, '打开调试工具');
-  openButton.style.backgroundColor = 'green';
+  let button0 = windowElementer.createItem('button', undefined, undefined, '打开PageSpy');
+  button0.style.backgroundColor = 'yellow';
   // @ts-ignore
-  openButton.onclick = () => { eruda.init(); };
-  let closeButton = windowElementer.createItem('button', undefined, undefined, '关闭调试工具');
-  closeButton.style.backgroundColor = 'yellow';
+  button0.onclick = () => { window.$harbor = new DataHarborPlugin(); window.$rrweb = new RRWebPlugin();[window.$harbor, window.$rrweb].forEach(p => { PageSpy.registerPlugin(p) }), window.$pageSpy = new PageSpy() };
+  let button1 = windowElementer.createItem('button', undefined, undefined, '打开Eruda');
+  button1.style.backgroundColor = 'green';
   // @ts-ignore
-  closeButton.onclick = () => { eruda.destroy(); }
-  let dis = windowElementer.createItem('p', undefined, undefined, '具备调试修复功能，当因为网络等原因无法进入时，可以点击在右下角打开调试工具，运行"iirosesave()"将保存存档，运行"iiroserepair()"将尝试修复程序，修复后重载可能可以进入,运行"closeconsole()"将关闭调试工具。');
-  workSpace.append(openButton, closeButton, dis);
+  button1.onclick = () => { eruda.init(); eruda.position({ x: window.innerWidth - 100, y: window.innerHeight - 50 }); };
+  let button2 = windowElementer.createItem('button', undefined, undefined, '关闭Eruda');
+  button2.style.backgroundColor = 'yellow';
+  // @ts-ignore
+  button2.onclick = () => { eruda.destroy(); }
+  let button3 = windowElementer.createItem('button', undefined, undefined, '设置是否注入Eruda');
+  button3.style.backgroundColor = 'green';
+  button3.onclick = () => {
+    let allowTemp = localStorage.getItem('allowEruda');
+    if (allowTemp == true.toString())
+      localStorage.setItem('allowEruda', false.toString());
+    else
+      localStorage.setItem('allowEruda', true.toString());
+    // @ts-ignore
+    _alert(`allowEruda设置为${localStorage.getItem('allowEruda')}`);
+  }
+  let button4 = windowElementer.createItem('button', undefined, undefined, '设置是否注入PageSpy');
+  button4.style.backgroundColor = 'yellow';
+  // @ts-ignore
+  button4.onclick = () => {
+    let allowTemp = localStorage.getItem('allowPageSpy');
+    if (allowTemp == true.toString())
+      localStorage.setItem('allowPageSpy', false.toString());
+    else
+      localStorage.setItem('allowPageSpy', true.toString());
+    // @ts-ignore
+    _alert(`allowPageSpy设置为${localStorage.getItem('allowPageSpy')}`);
+  }
+  let button5 = windowElementer.createItem('button', undefined, undefined, '设置PageSpy服务器地址');
+  button5.style.backgroundColor = 'green';
+  // @ts-ignore
+  button5.onclick = () => {
+    let urlTemp = prompt("不要轻易输入陌生人给的调试服务器地址，远程调试人员将看到你的所有数据！！！\n请输入PageSpy服务器地址:");
+    if (urlTemp != null && urlTemp != "") {
+      localStorage.setItem('pageSpyURL', urlTemp);
+    }
+  }
+  let button6 = windowElementer.createItem('button', undefined, undefined, '设置遇到错误是否自动重启');
+  button6.style.backgroundColor = 'yellow';
+  // @ts-ignore
+  button6.onclick = () => {
+    let allowTemp = localStorage.getItem('allowAutoReload');
+    if (allowTemp == true.toString())
+      localStorage.setItem('allowAutoReload', false.toString());
+    else
+      localStorage.setItem('allowAutoReload', true.toString());
+    // @ts-ignore
+    _alert(`allowAutoReload设置为${localStorage.getItem('allowAutoReload')}`);
+  }
+  let dis = windowElementer.createItem('p', undefined, undefined, '<a href="https://www.pagespy.org/">PageSpy远程调试工具官网</a>  具备调试修复功能，当因为网络等原因无法进入时，可以点击在右下角打开调试工具，运行"iirosesave()"将保存存档，运行"iiroserepair()"将尝试修复程序，修复后重载可能可以进入,运行"closeconsole()"将关闭调试工具。');
+  workSpace.append(button0, button1, button2, button3, button4, button5, dis);
   let fabiricMianWindow = windowElementer.createFabrcWindow('fabricMainWindow', 400, workSpace);
   // 关闭窗口
   windowElementer.closeElement(fabiricMianWindow);

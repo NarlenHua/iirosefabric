@@ -27,20 +27,84 @@ function openconsole() { eruda.init(); }
 // @ts-ignore
 function closeconsole() { eruda.destroy(); }
 
-function runBegain() {
+function ingectEruda() {
+  // 注入eruda
   let er = document.createElement('script');
   er.src = "https://cdn.bootcdn.net/ajax/libs/eruda/3.1.0/eruda.min.js";
   document.body.append(er);
   // @ts-ignore
   er.onload = () => { eruda.init(); eruda.position({ x: window.innerWidth - 100, y: window.innerHeight - 50 }); }
+}
+
+function ingectPageSpy() {
+  try {
+    let pageSpyURL = localStorage.getItem('pageSpyURL');
+    if (pageSpyURL == null || pageSpyURL == '') {
+      localStorage.setItem('pageSpyURL', '');
+      // @ts-ignore
+      _alert('未设置PageSpy调试服务器地址，请先设置');
+      console.error('未设置PageSpy调试服务器地址，请先设置');
+      return;
+    } else {
+      let ps1 = document.createElement('script');
+      ps1.setAttribute('crossorigin', 'anonymous');
+      ps1.src = `${pageSpyURL}/page-spy/index.min.js`;
+      let ps2 = document.createElement('script');
+      ps2.setAttribute('crossorigin', 'anonymous');
+      ps2.src = `${pageSpyURL}/plugin/data-harbor/index.min.js`;
+      let ps3 = document.createElement('script');
+      ps3.setAttribute('crossorigin', 'anonymous');
+      ps3.src = `${pageSpyURL}/plugin/rrweb/index.min.js`;
+      document.body.append(ps1, ps2, ps3);
+      /**
+   * 异步延时函数
+   * @param {时间毫秒} ms
+   */
+      async function sleep(ms: number) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+      // 初始化
+      ps1.onload = async () => {
+        for (let i = 0; i < 20; i++) {
+          // @ts-ignore
+          if (window.DataHarborPlugin != undefined && window.RRWebPlugin != undefined && window.PageSpy != undefined) {
+            // @ts-ignore
+            window.$harbor = new DataHarborPlugin(); window.$rrweb = new RRWebPlugin();[window.$harbor, window.$rrweb].forEach(p => { PageSpy.registerPlugin(p) }), window.$pageSpy = new PageSpy()
+            break;
+          }
+          await sleep(500);
+        }
+        // @ts-ignore
+        // if (window.$harbor == undefined || window.$rrweb == undefined)
+        if (window.DataHarborPlugin != undefined && window.RRWebPlugin != undefined && window.PageSpy != undefined)
+          console.log('PageSpy初始化成功');
+        else
+          console.error('PageSpy初始化失败');
+      };
+    }
+  } catch (error) {
+    console.log('PageSpy初始化失败', 'error');
+  }
+
+}
+function runBegain() {
+  let allowTemp = localStorage.getItem('allowEruda');
+  if (allowTemp == true.toString())
+    ingectEruda();
+  else
+    localStorage.setItem('allowEruda', false.toString());
+  allowTemp = localStorage.getItem('allowPageSpy');
+  if (allowTemp == true.toString()) {
+    ingectPageSpy();
+  }
+  else
+    localStorage.setItem('allowPageSpy', false.toString());
+
   // 把保存、退出、尝试修复函数注入到环境中
   // @ts-ignore
   window.iirosesave = () => { Probe.init.pako || (Probe.init.pako = 1, Utils.getScript("lib/js/app/server/pako.js")); try { Utils.service.saveStatus(0) } catch (e) { sendBug(e, "saveStatus") } for (var t, o = {}, i = 0, a = localStorage.length; i < a; ++i)o[t = localStorage.key(i)] = localStorage.getItem(t); var e = JSON.stringify(o), s = new Date, s = [s.getFullYear(), Utils.smallTools.zeroFill(s.getMonth() + 1), Utils.smallTools.zeroFill(s.getDate())].join("-") + "_" + [Utils.smallTools.zeroFill(s.getHours()), Utils.smallTools.zeroFill(s.getMinutes()), Utils.smallTools.zeroFill(s.getSeconds())].join("-"), r = uid + "_" + s + ".bak.iirose", s = pako.gzip(e, { level: 9 }), e = new Uint8Array(s.length + 3); e[0] = 2, e[1] = 33, e[s.length + 2] = 77, e.set(s, 2), e = new Blob([e]), 5 == device ? Utils.blobToDataURL(e, function (e) { Main.saveFile(e, r) }) : Utils.service.downloadBlob(e, r) };
   // @ts-ignore
-  window.iiroserepair = () => {
-    localStorage.removeItem('functionPos');
-    location.reload();
-  }
+  window.iiroserepair = () => { localStorage.removeItem('functionPos'); location.reload(); }
   // @ts-ignore
   window.openconsole = () => { eruda.init(); };
   // @ts-ignore
@@ -55,16 +119,21 @@ function runBegain() {
    * @param error Error对象
    */
   window.onerror = function (message, source, lineno, colno, error) {
-    console.log(`消息"${message}"`, '错误脚本的链接', source, '错误行号', lineno, '错误列号', colno, '错误对象', error);
+    // console.log(`消息"${message}"`, '错误脚本的链接', source, '错误行号', lineno, '错误列号', colno, '错误对象', error);
     let judge1 = "TypeError: Cannot read properties of undefined (reading 'lastChild')";
     let judge2 = "at SocketInit.socket.onopen";
+    let allowTemp = localStorage.getItem('allowAutoReload');
     if (error?.stack?.toString().includes(judge1) && error?.stack?.toString().includes(judge2)) {
-      if (confirm('检测到错误是否保存存档？')) {
-        // @ts-ignore
-        Probe.init.pako || (Probe.init.pako = 1, Utils.getScript("lib/js/app/server/pako.js")); try { Utils.service.saveStatus(0) } catch (e) { sendBug(e, "saveStatus") } for (var t, o = {}, i = 0, a = localStorage.length; i < a; ++i)o[t = localStorage.key(i)] = localStorage.getItem(t); var e = JSON.stringify(o), s = new Date, s = [s.getFullYear(), Utils.smallTools.zeroFill(s.getMonth() + 1), Utils.smallTools.zeroFill(s.getDate())].join("-") + "_" + [Utils.smallTools.zeroFill(s.getHours()), Utils.smallTools.zeroFill(s.getMinutes()), Utils.smallTools.zeroFill(s.getSeconds())].join("-"), r = uid + "_" + s + ".bak.iirose", s = pako.gzip(e, { level: 9 }), e = new Uint8Array(s.length + 3); e[0] = 2, e[1] = 33, e[s.length + 2] = 77, e.set(s, 2), e = new Blob([e]), 5 == device ? Utils.blobToDataURL(e, function (e) { Main.saveFile(e, r) }) : Utils.service.downloadBlob(e, r)
-      }
-      if (confirm('检测到错误是否尝试修复重载？')) {
-        localStorage.removeItem('functionPos'); location.reload();
+      if (allowTemp == true.toString()) { localStorage.removeItem('functionPos'); location.reload(); return false; }
+      else {
+        console.log(`消息"${message}"`, '错误脚本的链接', source, '错误行号', lineno, '错误列号', colno, '错误对象', error);
+        if (confirm('检测到错误是否保存存档？')) {
+          // @ts-ignore
+          Probe.init.pako || (Probe.init.pako = 1, Utils.getScript("lib/js/app/server/pako.js")); try { Utils.service.saveStatus(0) } catch (e) { sendBug(e, "saveStatus") } for (var t, o = {}, i = 0, a = localStorage.length; i < a; ++i)o[t = localStorage.key(i)] = localStorage.getItem(t); var e = JSON.stringify(o), s = new Date, s = [s.getFullYear(), Utils.smallTools.zeroFill(s.getMonth() + 1), Utils.smallTools.zeroFill(s.getDate())].join("-") + "_" + [Utils.smallTools.zeroFill(s.getHours()), Utils.smallTools.zeroFill(s.getMinutes()), Utils.smallTools.zeroFill(s.getSeconds())].join("-"), r = uid + "_" + s + ".bak.iirose", s = pako.gzip(e, { level: 9 }), e = new Uint8Array(s.length + 3); e[0] = 2, e[1] = 33, e[s.length + 2] = 77, e.set(s, 2), e = new Blob([e]), 5 == device ? Utils.blobToDataURL(e, function (e) { Main.saveFile(e, r) }) : Utils.service.downloadBlob(e, r)
+        }
+        if (confirm('检测到错误是否尝试修复重载？')) {
+          localStorage.removeItem('functionPos'); location.reload();
+        }
       }
     }
     return false;
