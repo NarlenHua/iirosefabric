@@ -154,7 +154,7 @@ async function initMainWindow() {
 
   }
   let button5 = windowElementer.createItem('button', undefined, undefined, '注入PageSpy');
-  button5.style.backgroundColor = 'yellow';
+  button5.style.backgroundColor = 'green';
   // @ts-ignore
   button5.onclick = async () => {
     let pageSpyURL = localStorage.getItem('pageSpyURL');
@@ -180,7 +180,7 @@ async function initMainWindow() {
     }
   }
   let button6 = windowElementer.createItem('button', undefined, undefined, '设置PageSpy服务器地址');
-  button6.style.backgroundColor = 'green';
+  button6.style.backgroundColor = 'yellow';
   // @ts-ignore
   button6.onclick = () => {
     let urlTemp = prompt("不要轻易输入陌生人给的调试服务器地址，远程调试人员将看到你的所有数据！！！\n请输入PageSpy服务器地址:");
@@ -188,10 +188,18 @@ async function initMainWindow() {
       localStorage.setItem('pageSpyURL', urlTemp);
     }
   }
+  let button7 = windowElementer.createItem('button', undefined, undefined, '删除缓存');
+  button7.style.backgroundColor = 'green';
+  // @ts-ignore
+  button7.onclick = async () => {
+    await caches.delete('v');
+    // @ts-ignore
+    _alert('浏览器缓存已经删除');
+  }
 
   let dis1 = windowElementer.createItem('p', undefined, undefined, '实验性：');
   let dis2 = windowElementer.createItem('p', undefined, undefined, '<a href="https://www.pagespy.org/">PageSpy远程调试工具官网</a>  具备调试修复功能，当因为网络等原因无法进入时，可以点击在右下角打开调试工具，运行"iirosesave()"将保存存档，运行"iiroserepair()"将尝试修复程序，修复后重载可能可以进入,运行"closeconsole()"将关闭调试工具。');
-  workSpace.append(button0, button1, button2, button3, dis1, button4, button5, button6, dis2);
+  workSpace.append(button0, button1, button2, button3, dis1, button4, button5, button6, button7, dis2);
   let fabiricMianWindow = windowElementer.createFabrcWindow('fabricMainWindow', 400, workSpace);
   // 关闭窗口
   windowElementer.closeElement(fabiricMianWindow);

@@ -20,6 +20,13 @@ function iirosesave() { Probe.init.pako || (Probe.init.pako = 1, Utils.getScript
 // 修复
 // @ts-ignore
 function iiroserepair() { localStorage.removeItem('functionPos'); location.reload(true); }
+// 关闭调试工具
+// @ts-ignore
+async function iiroseremovecaches() {
+  await caches.delete('v');
+  // @ts-ignore
+  _alert('浏览器缓存已经删除');
+}
 // 打开调试工具
 // @ts-ignore
 function openconsole() { eruda.init(); }
@@ -368,6 +375,7 @@ export const ingector = {
   ingectorStyle,
   iirosesave,
   iiroserepair,
+  iiroseremovecaches,
   openconsole,
   closeconsole,
   runBegain,
