@@ -19,5 +19,5 @@ function decodeMessage(message: string) {
   return messageObjList;
 }
 export const decoder = {
-  'decodeMessage': decodeMessage
+  decodeMessage,
 }

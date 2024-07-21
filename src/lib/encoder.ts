@@ -22,6 +22,6 @@ function encodePrivateMessage(uid: string, message: string, color: string) {
 }
 
 export const encoder = {
-    'encodePublicMessage': encodePublicMessage,
-    'encodePrivateMessage': encodePrivateMessage
+    encodePublicMessage,
+    encodePrivateMessage,
 }

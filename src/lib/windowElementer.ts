@@ -1,7 +1,6 @@
-import { fabricAPI } from "./fabricAPI"
 import { fabricStyle } from "./fabricStyle"
 import { fabricSVG } from "./fabricSVG";
-
+import { FabricAPI } from "./fabricAPI";
 /**
  * 创建标签
  * @param tag 标签类型
@@ -165,66 +164,49 @@ function turnDisplay(ele: HTMLElement) {
     closeElement(ele);
 }
 
-/**
- * 添加菜单
- * @param Menu 一级菜单元素
- * @param items 二级菜单元素列表
- * @param num 要添加到哪个子元素（下标）之前，null表示添加到父元素的子元素列表最后
- * @param isbefore 是否添加到前面
- */
-function insertMenu(Menu: HTMLElement, items: HTMLElement[], num: number, isbefore: boolean) {
-  // 将二级菜单合并在一起。
-  let functionItemBox: HTMLElement = createItem('div', undefined, 'functionItemBox');
-  for (let i = 0; i < items.length; i++) {
-    console.log('插入元素', i, items[i]);
-    functionItemBox.append(items[i]);
+
+export class WindowElementer {
+  api!: FabricAPI;
+  createItem = createItem;
+  createFabrcWindow = createFabrcWindow;
+  createMenu = createMenu;
+  createMenuItem = createMenuItem;
+  closeElement = closeElement;
+  openElement = openElement;
+  turnDisplay = turnDisplay;
+  /**
+   * 添加菜单
+   * @param Menu 一级菜单元素
+   * @param items 二级菜单元素列表
+   * @param num 要添加到哪个子元素（下标）之前，null表示添加到父元素的子元素列表最后
+   * @param isbefore 是否添加到前面
+   */
+  insertMenu(Menu: HTMLElement, items: HTMLElement[], num: number, isbefore: boolean) {
+    // 将二级菜单合并在一起。
+    let functionItemBox: HTMLElement = createItem('div', undefined, 'functionItemBox');
+    for (let i = 0; i < items.length; i++) {
+      console.log('插入元素', i, items[i]);
+      functionItemBox.append(items[i]);
+    }
+    // 把二级菜单关上
+    closeElement(functionItemBox);
+    Menu.addEventListener('click', () => {
+      turnDisplay(functionItemBox);
+    });
+    // 更新列表
+    this.api.iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
+    if (isbefore) {
+      console.log('添加菜单', Menu);
+      this.api.iiroseElements.functionButtonGroupList![num].before(Menu);
+      this.api.iiroseElements.functionButtonGroupList![num].before(functionItemBox);
+    } else {
+      this.api.iiroseElements.functionButtonGroupList![num].after(functionItemBox);
+      this.api.iiroseElements.functionButtonGroupList![num].after(Menu);
+    }
+    // 插入完成后也更新一下
+    this.api.iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
   }
-  // 把二级菜单关上
-  closeElement(functionItemBox);
-  Menu.addEventListener('click', () => {
-    turnDisplay(functionItemBox);
-  });
-  // 更新列表
-  fabricAPI.someElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
-  if (isbefore) {
-    console.log('添加菜单', Menu);
-    fabricAPI.someElements.functionButtonGroupList![num].before(Menu);
-    fabricAPI.someElements.functionButtonGroupList![num].before(functionItemBox);
-  } else {
-    fabricAPI.someElements.functionButtonGroupList![num].after(functionItemBox);
-    fabricAPI.someElements.functionButtonGroupList![num].after(Menu);
+  async initWindowElementer(tempAPI: FabricAPI) {
+    this.api = tempAPI;
   }
-  // 插入完成后也更新一下
-  fabricAPI.someElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
-}
-
-// function createConfirmationBox(id: string, title: string, descriotion: string, buttonList: Element[]) {
-//   let w;
-//   let h;
-//   if (screen.width / 4 * 3 < screen.height) {
-//     if (screen.width * 0.8 < 800) {
-//       w = screen.width * 0.8; h = w / 4 * 3;
-//     } else { w = 800; h = 600; }
-//   } else {
-//     if (screen.height * 0.8 < 600) {
-//       h = screen.height * 0.8; w = h / 3 * 4;
-//     } else { h = 600; w = 800; }
-//   }
-//   let ConfirmationBox: Element = createFabrcWindow(id, w, 'div', title, h);
-//   let WS: Element = ConfirmationBox.querySelector(`#${id}-workspace`);
-//   for (var i: buttonList[i].length; n = buttonList[i]; i--; i > 0) {
-
-//   }
-//   WS.appendChild()
-// }
-
-export const windowElementer = {
-  createItem,
-  createFabrcWindow,
-  createMenu,
-  createMenuItem,
-  closeElement,
-  openElement,
-  turnDisplay,
-  insertMenu
 }
