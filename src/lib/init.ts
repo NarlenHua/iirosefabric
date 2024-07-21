@@ -198,8 +198,8 @@ async function initMainWindow() {
   }
 
   let dis1 = windowElementer.createItem('p', undefined, undefined, '实验性：');
-  let dis2 = windowElementer.createItem('p', undefined, undefined, '<a href="https://www.pagespy.org/">PageSpy远程调试工具官网</a>  具备调试修复功能，当因为网络等原因无法进入时，可以点击在右下角打开调试工具，运行"iirosesave()"将保存存档，运行"iiroserepair()"将尝试修复程序，修复后重载可能可以进入,运行"closeconsole()"将关闭调试工具。');
-  workSpace.append(button0, button1, button2, button3, dis1, button4, button5, button6, button7, dis2);
+  let dis2 = windowElementer.createItem('div', undefined, undefined, '<a href="https://www.pagespy.org/">PageSpy远程调试工具官网</a>  具备调试修复功能，当因为网络等原因无法进入时，可以点击在右下角打开调试工具，运行"iirosesave()"将保存存档，运行"iiroserepair()"将尝试修复程序，修复后重载可能可以进入,运行"closeconsole()"将关闭调试工具。');
+  workSpace.append(button0, button1, button2, button3, button7, dis1, button4, button5, button6, dis2);
   let fabiricMianWindow = windowElementer.createFabrcWindow('fabricMainWindow', 400, workSpace);
   // 关闭窗口
   windowElementer.closeElement(fabiricMianWindow);
