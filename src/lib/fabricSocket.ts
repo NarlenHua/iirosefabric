@@ -43,15 +43,16 @@ export class FabricSocket {
         this.originalSend = window.socket.send;
         this.beforeSend = (param: string) => {
             console.debug(`发送消息"${param}"`);
-            return true;
+            return param;
         }
         this.afterSend = (param: string) => {
             console.debug(`成功发送"${param}"`);
         }
         this.send = (param: any) => {
-            if (this.beforeSend!(param) as boolean) {
-                this.originalSend!(param);
-                this.afterSend!(param as string);
+            let temp: string | boolean = this.beforeSend!(param);
+            if (temp) {
+                this.originalSend!(temp);
+                this.afterSend!(temp);
             }
         }
         // 覆写原来的发送函数
@@ -61,20 +62,22 @@ export class FabricSocket {
         // @ts-ignore
         this.originalOnmessage = socket._onmessage
         this.beforOnmessage = (param: any) => {
-            console.debug('收到消息' + param);
-            return true
+            console.debug(`收到消息 "${param}"`);
+            return param;
         }
         this.afterOnmessage = (param: any) => {
             let tempMessageList = decoder.decodeMessage(param as string)
+            console.debug(`收到消息 "${param}"`);
             for (let message of tempMessageList) {
-                console.debug('准备触发事件' + message.messageClass)
+                console.debug('准备触发事件', message.messageClass, message);
                 api.emitter.emit(message.messageClass, message)
             };
         }
         this.onmessage = (param: string) => {
-            if (this.beforOnmessage(param)) {
-                this.originalOnmessage(param);
-                this.afterOnmessage(param);
+            let temp: string | boolean = this.beforOnmessage(param);
+            if (temp) {
+                this.originalOnmessage(temp);
+                this.afterOnmessage(temp);
             }
         }
         // 覆写接收函数

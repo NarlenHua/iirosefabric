@@ -14,10 +14,14 @@ export default defineConfig({
         comments: false
       },
 
-      // 删除命令台输出
       compress: {
-        // drop_console: true,
-        // drop_debugger: true,
+        // 删除命令台输出
+        drop_console: true,
+        drop_debugger: true,
+        // 保留类名
+        keep_classnames: true,
+        // 保留函数名
+        keep_fnames: true,
       }
     },
     rollupOptions: {

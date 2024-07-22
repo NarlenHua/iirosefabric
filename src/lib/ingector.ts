@@ -48,7 +48,7 @@ async function ingectEruda() {
 
 async function runBegain() {
   // 首先把functionPos清0
-  localStorage.setItem('functionPos', '0#0');
+  localStorage.setItem('functionPos', '0#0,6');
   // 监听错误信息
   /**
    * 若该函数返回true，则阻止执行默认事件处理函数，如异常信息不会在console中打印。没有返回值或者返回值为false的时候，异常信息会在console中打印
@@ -58,26 +58,26 @@ async function runBegain() {
    * @param colno 发生错误的列号（数字）
    * @param error Error对象
    */
-  // window.onerror = function (message, source, lineno, colno, error) {
-  //   console.error(`消息"${message}"`, '错误脚本的链接', source, '错误行号', lineno, '错误列号', colno, '错误对象', `[[[${error?.toString()}]]]`);
-  //   let judge1 = "TypeError: Cannot read properties of undefined (reading 'lastChild')";
-  //   let judge2 = "at SocketInit.socket.onopen";
-  //   let allowTemp = localStorage.getItem('allowAutoReload');
-  //   if (error?.stack?.toString().includes(judge1) && error?.stack?.toString().includes(judge2) || /^TypeError: [a-z]\[[a-z]\[[a-z]\]\] is undefined$/gm.test(message as string)) {
-  //     if (allowTemp != false.toString()) { localStorage.removeItem('functionPos'); location.reload(); return false; }
-  //     else {
-  //       console.log(`消息"${message}"`, '错误脚本的链接', source, '错误行号', lineno, '错误列号', colno, '错误对象', error);
-  //       if (confirm('检测到错误是否保存存档？')) {
-  //         // @ts-ignore
-  //         Probe.init.pako || (Probe.init.pako = 1, Utils.getScript("lib/js/app/server/pako.js")); try { Utils.service.saveStatus(0) } catch (e) { sendBug(e, "saveStatus") } for (var t, o = {}, i = 0, a = localStorage.length; i < a; ++i)o[t = localStorage.key(i)] = localStorage.getItem(t); var e = JSON.stringify(o), s = new Date, s = [s.getFullYear(), Utils.smallTools.zeroFill(s.getMonth() + 1), Utils.smallTools.zeroFill(s.getDate())].join("-") + "_" + [Utils.smallTools.zeroFill(s.getHours()), Utils.smallTools.zeroFill(s.getMinutes()), Utils.smallTools.zeroFill(s.getSeconds())].join("-"), r = uid + "_" + s + ".bak.iirose", s = pako.gzip(e, { level: 9 }), e = new Uint8Array(s.length + 3); e[0] = 2, e[1] = 33, e[s.length + 2] = 77, e.set(s, 2), e = new Blob([e]), 5 == device ? Utils.blobToDataURL(e, function (e) { Main.saveFile(e, r) }) : Utils.service.downloadBlob(e, r)
-  //       }
-  //       if (confirm('检测到错误是否尝试修复重载？')) {
-  //         localStorage.removeItem('functionPos'); location.reload();
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
+  window.onerror = function (message, source, lineno, colno, error) {
+    console.error(`消息"${message}"`, '错误脚本的链接', source, '错误行号', lineno, '错误列号', colno, '错误对象', `[[[${error?.toString()}]]]`);
+    let judge1 = "TypeError: Cannot read properties of undefined (reading 'lastChild')";
+    let judge2 = "at SocketInit.socket.onopen";
+    let allowTemp = localStorage.getItem('allowAutoReload');
+    if (error?.stack?.toString().includes(judge1) && error?.stack?.toString().includes(judge2) || /^TypeError: [a-z]\[[a-z]\[[a-z]\]\] is undefined$/gm.test(message as string)) {
+      if (allowTemp != false.toString()) { localStorage.removeItem('functionPos'); location.reload(); return false; }
+      else {
+        console.log(`消息"${message}"`, '错误脚本的链接', source, '错误行号', lineno, '错误列号', colno, '错误对象', error);
+        if (confirm('检测到错误是否保存存档？')) {
+          // @ts-ignore
+          Probe.init.pako || (Probe.init.pako = 1, Utils.getScript("lib/js/app/server/pako.js")); try { Utils.service.saveStatus(0) } catch (e) { sendBug(e, "saveStatus") } for (var t, o = {}, i = 0, a = localStorage.length; i < a; ++i)o[t = localStorage.key(i)] = localStorage.getItem(t); var e = JSON.stringify(o), s = new Date, s = [s.getFullYear(), Utils.smallTools.zeroFill(s.getMonth() + 1), Utils.smallTools.zeroFill(s.getDate())].join("-") + "_" + [Utils.smallTools.zeroFill(s.getHours()), Utils.smallTools.zeroFill(s.getMinutes()), Utils.smallTools.zeroFill(s.getSeconds())].join("-"), r = uid + "_" + s + ".bak.iirose", s = pako.gzip(e, { level: 9 }), e = new Uint8Array(s.length + 3); e[0] = 2, e[1] = 33, e[s.length + 2] = 77, e.set(s, 2), e = new Blob([e]), 5 == device ? Utils.blobToDataURL(e, function (e) { Main.saveFile(e, r) }) : Utils.service.downloadBlob(e, r)
+        }
+        if (confirm('检测到错误是否尝试修复重载？')) {
+          localStorage.removeItem('functionPos'); location.reload();
+        }
+      }
+    }
+    return false;
+  }
   await ingectEruda();
   // 把保存、退出、尝试修复函数注入到环境中
   // @ts-ignore

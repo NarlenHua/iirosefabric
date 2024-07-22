@@ -20,8 +20,12 @@ function encodePrivateMessage(uid: string, message: string, color: string) {
         i: Math.random().toString().slice(2, 12)
     })
 }
+function encoderHidenMessage(messageNmae: string, uid: string, data: string) {
+    return `/<${messageNmae}>${uid}:${data}`;
+}
 
 export const encoder = {
     encodePublicMessage,
     encodePrivateMessage,
+    encoderHidenMessage
 }

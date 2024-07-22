@@ -45,6 +45,22 @@ export namespace MessageClass {
         this.messageClass = "PrivateMessage"
     }
   }
+  export class HiddenMessage {
+    messageName: string
+    uid: string
+    data: string
+    messageClass: string
+    constructor(message: string) {
+      let temp;
+      temp = message.match(/(?<=^[/]<).*(?=>[0-9|a-z]{13}:.*)/gm);
+      this.messageName = (temp == null) ? '' : temp[0];
+      temp = message.match(/(?<=^[/]<.*>)[0-9|a-z]{13}(?=:.*)/gm);
+      this.uid = (temp == null) ? '' : temp[0];
+      temp = message.match(/(?<=^[/]<.*>[0-9|a-z]{13}:).*/gm);
+      this.data = (temp == null) ? '' : temp[0];
+      this.messageClass = 'HidenMessage';
+    }
+  }
   export class UnkonwMessage {
     message: string
     messageClass: string
@@ -53,4 +69,5 @@ export namespace MessageClass {
       this.messageClass = "UnkonwMessage"
     }
   }
+
 }
