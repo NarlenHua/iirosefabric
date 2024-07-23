@@ -3,11 +3,12 @@ import { TinyEmitter } from "tiny-emitter";
 // @ts-ignore
 import { config } from '../../config';
 import { decoder } from './decoder';
-import { encoder } from './encoder';
 import { fabricSocket } from './fabricSocket';
 import { tools } from './tools';
 
 import { fabricAPI } from "./fabricAPI";
+
+import { encoder } from './encoder';
 import { fabricSVG } from "./fabricSVG";
 import { fabricStyle } from "./fabricStyle";
 import { messageClass } from "./messageClass";
@@ -221,7 +222,7 @@ async function initMainWindow() {
 
 // 初始化
 async function initFabricAPI() {
-    // 初始化一些静态的成员
+    // // 初始化一些静态的成员
     fabricAPI.version = config.version;
     fabricAPI.fabricSVG = fabricSVG;
     fabricAPI.fabricStyle = fabricStyle;

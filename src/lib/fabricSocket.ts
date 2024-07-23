@@ -1,11 +1,10 @@
-
-export declare const fabricSocket: {
-    beforeSend(_param: string): string | null;
-    originalSend(_param: string): string;
-    afterSend(_param: string): void;
-    send(_param: any): any;
-    beforOnmessage(_param: string): string | null;
-    originalOnmessage(_param: string): string;
-    afterOnmessage(_param: string): void;
-    onmessage(_param: any): any;
+export let fabricSocket: any = {
+    beforeSend(param: string): string | null { return param; },
+    originalSend(param: string) { return param; },
+    afterSend(param: string) { return param; },
+    send(param: any) { return param; },
+    beforOnmessage(param: any) { return param; },
+    originalOnmessage(param: string) { return param; },
+    afterOnmessage(param: any) { return param; },
+    onmessage(param: string) { return param; }
 }

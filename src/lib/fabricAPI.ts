@@ -1,7 +1,20 @@
 import { TinyEmitter } from "tiny-emitter";
+// @ts-ignore
+import { config } from '../../config';
+import { decoder } from './decoder';
+import { encoder } from './encoder';
+import { fabricSVG } from "./fabricSVG";
+import { fabricStyle } from "./fabricStyle";
+import { messageClass } from "./messageClass";
+import { windowTools } from "./windowTools";
+import { tools } from './tools';
+import { ingector } from "./ingector";
+import { fabricSocket } from './fabricSocket';
+import { iirsoeElements } from "./iiroseElement";
+// import { init } from "./init";
 
-export declare const fabricAPI: {
-  version: string,
+export class FabricAPI {
+  version: string = config.version;
   fabricSVG: {
     fabric: string;
     max: string;
@@ -11,7 +24,7 @@ export declare const fabricAPI: {
     more: string;
     delate: string;
     start: string;
-  };
+  } = fabricSVG;
   fabricStyle: {
     fabricCSS: string;
     class: {
@@ -21,13 +34,18 @@ export declare const fabricAPI: {
       'fabric-window-menubarbutton': string;
       'fabric-window-workspace': string;
     };
-  };
-  messageClass: {},
-  encoder: {},
+  } = fabricStyle;
+  messageClass = messageClass;
+  encoder = encoder;
   decoder: {
     decodeMessage(_message: any): any,
-  },
-  emitter: TinyEmitter,
+  } = decoder;
+  emitter = new TinyEmitter();
+  iiroseElements: {
+    movePanelHolder: HTMLElement | null,
+    functionHolder: HTMLElement | null,
+    functionButtonGroupList: Element[] | null
+  } = iirsoeElements;
   windowTools: {
     /**
  * 创建标签
@@ -83,12 +101,12 @@ export declare const fabricAPI: {
      */
     insertMenu(Menu: HTMLElement, items: HTMLElement[], num: number, isbefore: boolean): void,
 
-  },
+  } = windowTools;
   tools: {
     sleep(_ms: number): any,
     addStyle(id: string, css: string): Promise<boolean>,
     refreshElements(): any,
-  },
+  } = tools;
   ingector: {
     ingectorStyle: {
       ingectorCSS: string;
@@ -114,7 +132,7 @@ export declare const fabricAPI: {
      * 生成管理注入js文件列表的窗口,并返回控制它开关的二级菜单
      */
     creatIngectorWindow(): Promise<HTMLElement>,
-  },
+  } = ingector;
   fabricSocket: {
     beforeSend(_param: string): string | null;
     originalSend(_param: string): string;
@@ -124,11 +142,9 @@ export declare const fabricAPI: {
     originalOnmessage(_param: string): string;
     afterOnmessage(_param: string): void;
     onmessage(_param: any): any;
-  }
-  iiroseElements: {
-    movePanelHolder: HTMLElement | null,
-    functionHolder: HTMLElement | null,
-    functionButtonGroupList: Element[] | null
-  },
-
+  } = fabricSocket;
+  // constructor() {
+  //   init.initFabricAPI();
+  // }
 }
+export const fabricAPI: FabricAPI = new FabricAPI();
