@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
-import dts from 'vite-plugin-dts'
+// import { resolve } from 'path'
+// import dts from 'vite-plugin-dts'
 
 export default defineConfig({
   css: {
@@ -17,12 +17,12 @@ export default defineConfig({
       },
       compress: {
         // 删除命令台输出
-        // drop_console: true,
-        // drop_debugger: true,
+        drop_console: true,
+        drop_debugger: true,
         // 保留类名
-        keep_classnames: true,
+        // keep_classnames: true,
         // 保留函数名
-        keep_fnames: true,
+        // keep_fnames: true,
       }
     },
     rollupOptions: {
@@ -38,12 +38,12 @@ export default defineConfig({
       },
     },
     // 配置生成.d.ts文件
-    lib: {
-      entry: resolve(__dirname, 'src/lib/fabricAPI.ts'),
-      name: 'MyLib',
-      formats: ['es'],
-      fileName: 'fabricAPI'
-    }
+    // lib: {
+    //   entry: resolve(__dirname, 'src/lib/fabricAPI.ts'),
+    //   name: 'MyLib',
+    //   formats: ['es'],
+    //   fileName: 'fabricAPI'
+    // }
   },
-  plugins: [dts({ rollupTypes: true })]
+  // plugins: [dts({ rollupTypes: true })]
 })

@@ -1,20 +1,18 @@
-import { TinyEmitter } from "tiny-emitter";
+import { FabricAPI } from "./FabricAPI.d";
+import { fabricSocket } from "./fabricSocket";
+import { fabricStyle } from "./fabricStyle";
+import { iiroseElements } from "./iiroseElements";
+import { ingector } from "./ingector";
+import { tools } from "./tools";
+import { windowTools } from "./windowTools";
 
 // @ts-ignore
-import { config } from '../../config';
-import { decoder } from './decoder';
-import { fabricSocket } from './fabricSocket';
-import { tools } from './tools';
-
-import { fabricAPI } from "./fabricAPI";
-
-import { encoder } from './encoder';
+import { config } from "../../config.js"
+import { decoder } from "./decoder";
+import { encoder } from "./encoder.js";
 import { fabricSVG } from "./fabricSVG";
-import { fabricStyle } from "./fabricStyle";
 import { messageClass } from "./messageClass";
-import { windowTools } from "./windowTools";
-import { ingector } from "./ingector";
-
+import { emitter } from "./emitter.js";
 // 初始化fabricSocket
 async function initSocket() {
     console.log('代理网络');
@@ -41,78 +39,45 @@ async function initSocket() {
     // 发送
     // @ts-ignore
     fabricSocket.originalSend = window.socket.send;
-    fabricSocket.beforeSend = (param: string) => {
-        console.debug(`发送消息"${param}"`);
-        return param;
-    }
-    fabricSocket.afterSend = (param: string) => {
-        console.debug(`成功发送"${param}"`);
-    }
-    fabricSocket.send = (param: any) => {
-        let temp: string | null = fabricSocket.beforeSend(param);
-        if (temp != null) {
-            fabricSocket.originalSend!(temp);
-            fabricSocket.afterSend!(temp);
-        }
-    }
     // 覆写原来的发送函数
     // @ts-ignore
     socket.send = fabricSocket.send;
     // 接收
     // @ts-ignore
-    fabricSocket.originalOnmessage = socket._onmessage
-    fabricSocket.beforOnmessage = (param: any) => {
-        console.debug(`收到消息 "${param}"`);
-        return param;
-    }
-    fabricSocket.afterOnmessage = (param: any) => {
-        let tempMessageList = decoder.decodeMessage(param as string)
-        console.debug(`收到消息 "${param}"`);
-        for (let message of tempMessageList) {
-            console.debug('准备触发事件', message.messageClass, message);
-            fabricAPI.emitter.emit(message.messageClass, message)
-        };
-    }
-    fabricSocket.onmessage = (param: string) => {
-        let temp: string | null = fabricSocket.beforOnmessage(param);
-        if (temp != null) {
-            fabricSocket.originalOnmessage(temp);
-            fabricSocket.afterOnmessage(temp);
-        }
-    }
+    fabricSocket.originalOnmessage = socket._onmessage;
     // 覆写接收函数
     // @ts-ignore
-    socket._onmessage = fabricAPI.fabricSocket.onmessage;
+    socket._onmessage = fabricSocket.onmessage;
 }
 
 // 初始化元素
 async function initIirsoeElements() {
-    fabricAPI.iiroseElements.movePanelHolder = document.querySelector('#movePanelHolder');
-    fabricAPI.iiroseElements.functionHolder = document.querySelector('#functionHolder');
-    fabricAPI.iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
+    iiroseElements.movePanelHolder = document.querySelector('#movePanelHolder');
+    iiroseElements.functionHolder = document.querySelector('#functionHolder');
+    iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
 }
 
 // 初始化主窗口
 async function initMainWindow() {
     console.log('初始化窗口');
     // 一级菜单二级菜单
-    let menu = fabricAPI.windowTools.createMenu('fabricMianMenu', 'Fabric');
-    let menuItem1 = fabricAPI.windowTools.createMenuItem('fabric设置');
-    let menuItem2 = await fabricAPI.ingector.creatIngectorWindow();
+    let menu = windowTools.createMenu('fabricMianMenu', 'Fabric');
+    let menuItem1 = windowTools.createMenuItem('fabric设置');
+    let menuItem2 = await ingector.creatIngectorWindow();
     // 工作区
-    let workSpace: HTMLElement = fabricAPI.windowTools.createItem('div', `fabricMainWindow-workspace`, fabricAPI.fabricStyle.class["fabric-window-workspace"]);
+    let workSpace: HTMLElement = windowTools.createItem('div', `fabricMainWindow-workspace`, fabricStyle.class["fabric-window-workspace"]);
 
-    let button0 = fabricAPI.windowTools.createItem('button', undefined, undefined, '打开Eruda');
-    button0.style.backgroundColor = 'green';
+    let openEruda = windowTools.createItem('button', undefined, undefined, '打开Eruda');
+    openEruda.style.backgroundColor = '#ffffd2';
     // @ts-ignore
-    button0.onclick = () => { eruda.init(); eruda.position({ x: window.innerWidth - 100, y: window.innerHeight - 50 }); };
-    let button1 = fabricAPI.windowTools.createItem('button', undefined, undefined, '关闭Eruda');
-    button1.style.backgroundColor = 'yellow';
+    openEruda.onclick = () => { if (window.eruda != undefined) { eruda.init(); eruda.position({ x: window.innerWidth - 100, y: window.innerHeight - 50 }); } else { _alert('Eruda没有安装') } };
+    let closeEruda = windowTools.createItem('button', undefined, undefined, '关闭Eruda');
+    closeEruda.style.backgroundColor = '#fcbad3';
     // @ts-ignore
-    button1.onclick = () => { eruda.destroy(); }
-    let button2 = fabricAPI.windowTools.createItem('button', undefined, undefined, '设置是否自动启动Eruda');
-    button2.style.backgroundColor = 'green';
-    button2.onclick = () => {
+    closeEruda.onclick = () => { if (window.eruda != undefined) { eruda.destroy(); } else { _alert('Eruda没有安装') } }
+    let allowEruda = windowTools.createItem('button', undefined, undefined, '设置是否自动启动Eruda');
+    allowEruda.style.backgroundColor = '#aa96da';
+    allowEruda.onclick = () => {
         let allowTemp = localStorage.getItem('allowEruda');
         if (allowTemp == true.toString())
             localStorage.setItem('allowEruda', false.toString());
@@ -121,10 +86,39 @@ async function initMainWindow() {
         // @ts-ignore
         _alert(`allowEruda设置为${localStorage.getItem('allowEruda')}`);
     }
-    let button3 = fabricAPI.windowTools.createItem('button', undefined, undefined, '设置遇到错误是否自动重启');
-    button3.style.backgroundColor = 'yellow';
+    let deleteCache = windowTools.createItem('button', undefined, undefined, '删除缓存');
+    deleteCache.style.backgroundColor = '#61c0bf';
     // @ts-ignore
-    button3.onclick = () => {
+    deleteCache.onclick = async () => {
+        await caches.delete('v');
+        // @ts-ignore
+        _alert('浏览器缓存已经删除');
+    }
+    let allowCache = windowTools.createItem('button', undefined, undefined, '是否允许fabric向缓存注入资源');
+    allowCache.style.backgroundColor = '#ffd3b6';
+    allowCache.onclick = async () => {
+        let allowTemp = localStorage.getItem('allowCache');
+        if (allowTemp == true.toString()) {
+            // 转化为不允许并重新设置缓存
+            localStorage.setItem('allowCache', false.toString());
+            let message: string = (await (await fetch('https://iirose.com/messages.html?timestamp=new%20Date().getTime()')).text());
+            // 打开花园的缓存,将缓存写入
+            await (await caches.open('v')).put(
+                '/messages.html',
+                new Response(new Blob(
+                    [message]),
+                    { status: 200, statusText: "OK" }));
+        }
+        else {
+            localStorage.setItem('allowCache', true.toString());
+        }
+        // @ts-ignore
+        _alert(`allowCache设置为${localStorage.getItem('allowCache')}`);
+    }
+    let allowAutoReload = windowTools.createItem('button', undefined, undefined, '设置遇到错误是否自动重启');
+    allowAutoReload.style.backgroundColor = '#fae3d9';
+    // @ts-ignore
+    allowAutoReload.onclick = () => {
         let allowTemp = localStorage.getItem('allowAutoReload');
         if (allowTemp == false.toString())
             localStorage.setItem('allowAutoReload', true.toString());
@@ -133,10 +127,10 @@ async function initMainWindow() {
         // @ts-ignore
         _alert(`allowAutoReload设置为${localStorage.getItem('allowAutoReload')}`);
     }
-    let button4 = fabricAPI.windowTools.createItem('button', undefined, undefined, '打开PageSpy');
-    button4.style.backgroundColor = 'yellow';
+    let openPageSpy = windowTools.createItem('button', undefined, undefined, '打开PageSpy');
+    openPageSpy.style.backgroundColor = '#a5dee5';
     // @ts-ignore
-    button4.onclick = async () => {
+    openPageSpy.onclick = async () => {
         async function sleep(ms: number) {
             return new Promise((resolve) => setTimeout(resolve, ms));
         }
@@ -163,10 +157,10 @@ async function initMainWindow() {
         }
 
     }
-    let button5 = fabricAPI.windowTools.createItem('button', undefined, undefined, '注入PageSpy');
-    button5.style.backgroundColor = 'green';
+    let ingectPageSpy = windowTools.createItem('button', undefined, undefined, '注入PageSpy');
+    ingectPageSpy.style.backgroundColor = '#e0f9b5';
     // @ts-ignore
-    button5.onclick = async () => {
+    ingectPageSpy.onclick = async () => {
         let pageSpyURL = localStorage.getItem('pageSpyURL');
         if (pageSpyURL == null || pageSpyURL == '') {
             localStorage.setItem('pageSpyURL', '');
@@ -189,56 +183,58 @@ async function initMainWindow() {
             _alert('PageSpy已注入');
         }
     }
-    let button6 = fabricAPI.windowTools.createItem('button', undefined, undefined, '设置PageSpy服务器地址');
-    button6.style.backgroundColor = 'yellow';
+    let setPageSpyURL = windowTools.createItem('button', undefined, undefined, '设置PageSpy服务器地址');
+    setPageSpyURL.style.backgroundColor = '#fefdca';
     // @ts-ignore
-    button6.onclick = () => {
-        let urlTemp = prompt("不要轻易输入陌生人给的调试服务器地址，远程调试人员将看到你的所有数据！！！\n请输入PageSpy服务器地址:");
+    setPageSpyURL.onclick = () => {
+        let urlTemp = prompt("不要轻易输入陌生人给的调试服务器地址，\n远程调试人员将看到你的所有数据！！！\n请输入PageSpy服务器地址:");
         if (urlTemp != null && urlTemp != "") {
             localStorage.setItem('pageSpyURL', urlTemp);
         }
     }
-    let button7 = fabricAPI.windowTools.createItem('button', undefined, undefined, '删除缓存');
-    button7.style.backgroundColor = 'green';
-    // @ts-ignore
-    button7.onclick = async () => {
-        await caches.delete('v');
-        // @ts-ignore
-        _alert('浏览器缓存已经删除');
-    }
 
-    let dis1 = fabricAPI.windowTools.createItem('p', undefined, undefined, '实验性：');
-    let dis2 = fabricAPI.windowTools.createItem('div', undefined, undefined, '<a href="https://www.pagespy.org/">PageSpy远程调试工具官网</a>  具备调试修复功能，当因为网络等原因无法进入时，可以点击在右下角打开调试工具，运行"iirosesave()"将保存存档，运行"iiroserepair()"将尝试修复程序，修复后重载可能可以进入,运行"closeconsole()"将关闭调试工具。');
-    workSpace.append(button0, button1, button2, button3, button7, dis1, button4, button5, button6, dis2);
-    let fabiricMianWindow = fabricAPI.windowTools.createFabrcWindow('fabricMainWindow', 400, workSpace);
+
+    let dis1 = windowTools.createItem('p', undefined, undefined, '设置Eruda');
+    let dis2 = windowTools.createItem('p', undefined, undefined, '设置缓存影响注入在缓存里的脚本');
+    let dis3 = windowTools.createItem('div', undefined, undefined, '设置远程调试服务器，运行"iirosesave()"将保存存档，运行"iiroserepair()"将尝试修复程序，修复后重载可能可以进入,运行"closeconsole()"将关闭调试工具。');
+    let ps = document.createElement('a');
+    ps.href = 'https://www.pagespy.org/';
+    ps.innerHTML = 'PageSpy官网链接';
+    ps.style.backgroundColor = '#ffcfdf';
+    workSpace.append(dis1, openEruda, closeEruda, allowEruda);
+    workSpace.append(dis2, deleteCache, allowCache, allowAutoReload);
+    workSpace.append(dis3, openPageSpy, ingectPageSpy, setPageSpyURL, ps);
+    let fabiricMianWindow = windowTools.createFabrcWindow('fabricMainWindow', 400, workSpace);
     // 关闭窗口
-    fabricAPI.windowTools.closeElement(fabiricMianWindow);
+    windowTools.closeElement(fabiricMianWindow);
     console.log('窗口', fabiricMianWindow);
-    menuItem1.onclick = () => { fabricAPI.windowTools.turnDisplay(fabiricMianWindow); };
-    fabricAPI.iiroseElements.movePanelHolder?.appendChild(fabiricMianWindow);
-    console.log('移动', fabricAPI.iiroseElements.movePanelHolder);
-    fabricAPI.windowTools.insertMenu(menu, [menuItem1, menuItem2], 0, true);
+    menuItem1.onclick = () => { windowTools.turnDisplay(fabiricMianWindow); };
+    iiroseElements.movePanelHolder?.appendChild(fabiricMianWindow);
+    console.log('移动', iiroseElements.movePanelHolder);
+    windowTools.insertMenu(menu, [menuItem1, menuItem2], 0, true);
 }
 
+let fabricAPI: FabricAPI = new FabricAPI();
 // 初始化
 async function initFabricAPI() {
-    // // 初始化一些静态的成员
+    // 先等待网络连接好
+    await initSocket();
+    // 初始化一些静态的成员
     fabricAPI.version = config.version;
     fabricAPI.fabricSVG = fabricSVG;
     fabricAPI.fabricStyle = fabricStyle;
+    fabricAPI.messageClass = messageClass;
     fabricAPI.encoder = encoder;
     fabricAPI.decoder = decoder;
-    fabricAPI.messageClass = messageClass;
-    fabricAPI.emitter = new TinyEmitter();
+    fabricAPI.emitter = emitter;
     fabricAPI.windowTools = windowTools;
     fabricAPI.tools = tools;
     fabricAPI.ingector = ingector;
     // 初始化动态的成员
-    await initSocket();
     await initIirsoeElements();
     // 注入CSS
-    await fabricAPI.tools.addStyle('fabricStyle', fabricAPI.fabricStyle.fabricCSS);
-    await fabricAPI.tools.addStyle('ingectorStyle', fabricAPI.ingector.ingectorStyle.ingectorCSS);
+    await tools.addStyle('fabricStyle', fabricStyle.fabricCSS);
+    await tools.addStyle('ingectorStyle', ingector.ingectorStyle.ingectorCSS);
     await initMainWindow();
     // 将接口注入到环境中
     // @ts-ignore
@@ -247,12 +243,13 @@ async function initFabricAPI() {
     window.top.fabricAPI = fabricAPI;
     // 运行外部脚本
     await fabricAPI.ingector.runEnd();
-    // 替换缓存里的
+    // 将脚本注入到缓存
     await fabricAPI.ingector.replaceHTML();
     // @ts-ignore
     _alert("Fabric注入成功")
 }
 export const init = {
+    fabricAPI,
     initSocket,
     initIirsoeElements,
     initMainWindow,

@@ -2,7 +2,7 @@ let movePanelHolder: HTMLElement | null = document.querySelector('#movePanelHold
 let functionHolder: HTMLElement | null = document.querySelector('#functionHolder');
 let functionButtonGroupList: Element[] | null = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
 
-export const iirsoeElements = {
+export const iiroseElements = {
     movePanelHolder,
     functionHolder,
     functionButtonGroupList

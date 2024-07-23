@@ -1,4 +1,7 @@
-import { fabricAPI } from "./fabricAPI";
+import { fabricStyle } from "./fabricStyle";
+import { iiroseElements } from "./iiroseElements";
+import { windowTools } from "./windowTools";
+
 // 样式
 const ingectorStyle = {
   'ingectorCSS': '.ingector-table{background-color:#cd9f9f;width:100%;table-layout:fixed;text-align:center}.ingector-title{background-color:#b99}.ingector-linkname{background-color:#ffd0d0}.ingector-link{background-color:#fdb8b8}.ingector-choice{background-color:#ff9f9f}.ingector-table input{width:90%;text-align:center}.ingector-table button{width:90%;text-align:center}',
@@ -31,6 +34,7 @@ function openconsole() { eruda.init(); }
 // @ts-ignore
 function closeconsole() { eruda.destroy(); }
 
+// 注入Eruda和PageSpy
 async function ingectEruda() {
   // 注入eruda
   let er = document.createElement('script');
@@ -46,8 +50,6 @@ async function ingectEruda() {
 }
 
 async function runBegain() {
-  // 首先把functionPos清0
-  localStorage.setItem('functionPos', '0#0,6');
   // 监听错误信息
   /**
    * 若该函数返回true，则阻止执行默认事件处理函数，如异常信息不会在console中打印。没有返回值或者返回值为false的时候，异常信息会在console中打印
@@ -148,31 +150,45 @@ async function runEnd() {
   * @param functions 函数列表
 */
 async function replaceHTML(scripturls?: string[], functions?: Array<() => void>) {
-  let message: string = (await (await fetch('https://iirose.com/messages.html?timestamp=new%20Date().getTime()')).text());
-  let scriptTemp: string = `<script>${runBegain}${runBegain.name}();</script>`;
-  if (scripturls != undefined)
-    for (let i = 0; i < scripturls.length; i++)
-      scriptTemp = scriptTemp + `<scrpit src="${scripturls[i]}"></script>`
-  if (functions != undefined)
-    for (let i = 0; i < functions.length; i++)
-      scriptTemp = scriptTemp + `<scrpit>${functions[i]}${functions[i].name}();</script>`
-  let newMessage: string = message.slice(0, message.length - 14) + scriptTemp + message.slice(message.length - 14);
-  // 打开花园的缓存,将缓存写入
-  await (await caches.open('v')).put(
-    '/messages.html',
-    new Response(new Blob(
-      [newMessage]),
-      { status: 200, statusText: "OK" }));
+  // 首先把functionPos清0
+  localStorage.setItem('functionPos', '0#0,6');
+  window.addEventListener('unload', (event) => {
+    localStorage.setItem('functionPos', '0#0,6');
+    console.log('界面重载，清理', event);
+  });
+  let allowTemp = localStorage.getItem('allowCache');
+  if (allowTemp != true.toString()) {
+    localStorage.setItem('allowCache', false.toString());
+    return;
+  }
+  else {
+    let message: string = (await (await fetch('https://iirose.com/messages.html?timestamp=new%20Date().getTime()')).text());
+    let scriptTemp: string = `<script>${runBegain}${runBegain.name}();</script>`;
+    if (scripturls != undefined)
+      for (let i = 0; i < scripturls.length; i++)
+        scriptTemp = scriptTemp + `<scrpit src="${scripturls[i]}"></script>`
+    if (functions != undefined)
+      for (let i = 0; i < functions.length; i++)
+        scriptTemp = scriptTemp + `<scrpit>${functions[i]}${functions[i].name}();</script>`
+    let newMessage: string = message.slice(0, message.length - 14) + scriptTemp + message.slice(message.length - 14);
+    // 打开花园的缓存,将缓存写入
+    await (await caches.open('v')).put(
+      '/messages.html',
+      new Response(new Blob(
+        [newMessage]),
+        { status: 200, statusText: "OK" }));
+  }
+
 }
 
 // 创建一个表格的一行
 function createTabletr(name: HTMLElement, link: HTMLElement, choice: HTMLElement) {
-  let tabletr = fabricAPI.windowTools.createItem('tr');
-  let nametd = fabricAPI.windowTools.createItem('td', undefined, ingectorStyle.class["ingector-linkname"]);
+  let tabletr = windowTools.createItem('tr');
+  let nametd = windowTools.createItem('td', undefined, ingectorStyle.class["ingector-linkname"]);
   nametd.append(name);
-  let linktd = fabricAPI.windowTools.createItem('td', undefined, ingectorStyle.class["ingector-link"]);
+  let linktd = windowTools.createItem('td', undefined, ingectorStyle.class["ingector-link"]);
   linktd.append(link);
-  let choicetd = fabricAPI.windowTools.createItem('td', undefined, ingectorStyle.class["ingector-choice"]);
+  let choicetd = windowTools.createItem('td', undefined, ingectorStyle.class["ingector-choice"]);
   choicetd.append(choice);
   tabletr.append(nametd, linktd, choicetd);
   return tabletr;
@@ -183,7 +199,7 @@ async function createTable(tableType: number, writeButton: HTMLElement, readButt
   let tableElements: [HTMLElement, HTMLElement, HTMLElement, HTMLElement][] = [];
   let tableValues: [string, string, number][] = [];
   console.log('表格类型：', tableType);
-  let table = fabricAPI.windowTools.createItem('table', undefined, ingectorStyle.class["ingector-table"]);
+  let table = windowTools.createItem('table', undefined, ingectorStyle.class["ingector-table"]);
   let titleTemp = ''
   switch (tableType) {
     case 0:
@@ -200,14 +216,14 @@ async function createTable(tableType: number, writeButton: HTMLElement, readButt
       titleTemp = '未知的资源';
   }
   table.innerHTML = `<thead><tr><th colspan="3" class="ingector-title">${titleTemp}</th></tr><tr><th>名称</th><th>链接</th><th>选项</th></tr></thead>`;
-  let tablebody = fabricAPI.windowTools.createItem('tbody');
+  let tablebody = windowTools.createItem('tbody');
   let tabletr = createTabletr(writeButton, readButton, addButton)
   tablebody.append(tabletr);
   table.append(tablebody);
   let addline = async (lineValue?: [string, string, number]) => {
-    let name: HTMLInputElement = fabricAPI.windowTools.createItem('input') as HTMLInputElement;
-    let link = fabricAPI.windowTools.createItem('input') as HTMLInputElement;
-    let choice = fabricAPI.windowTools.createItem('button') as HTMLButtonElement;
+    let name: HTMLInputElement = windowTools.createItem('input') as HTMLInputElement;
+    let link = windowTools.createItem('input') as HTMLInputElement;
+    let choice = windowTools.createItem('button') as HTMLButtonElement;
     let value: [string, string, number];
     if (lineValue != undefined) {
       value = lineValue;
@@ -317,38 +333,38 @@ async function createTable(tableType: number, writeButton: HTMLElement, readButt
  */
 async function creatIngectorWindow() {
   // 二级菜单
-  let menuItem = fabricAPI.windowTools.createMenuItem('设置注入的资源');
+  let menuItem = windowTools.createMenuItem('设置注入的资源');
   // 工作区
-  let workSpace: HTMLElement = fabricAPI.windowTools.createItem('div', `ingectorjsWindow-workspace`, fabricAPI.fabricStyle.class["fabric-window-workspace"])
+  let workSpace: HTMLElement = windowTools.createItem('div', `ingectorjsWindow-workspace`, fabricStyle.class["fabric-window-workspace"])
   let table0 = await createTable(
     0,
-    fabricAPI.windowTools.createItem('button', undefined, undefined, '写入'),
-    fabricAPI.windowTools.createItem('button', undefined, undefined, '读取'),
-    fabricAPI.windowTools.createItem('button', undefined, undefined, '添加')
+    windowTools.createItem('button', undefined, undefined, '写入'),
+    windowTools.createItem('button', undefined, undefined, '读取'),
+    windowTools.createItem('button', undefined, undefined, '添加')
   );
   let table1 = await createTable(
     1,
-    fabricAPI.windowTools.createItem('button', undefined, undefined, '写入'),
-    fabricAPI.windowTools.createItem('button', undefined, undefined, '读取'),
-    fabricAPI.windowTools.createItem('button', undefined, undefined, '添加')
+    windowTools.createItem('button', undefined, undefined, '写入'),
+    windowTools.createItem('button', undefined, undefined, '读取'),
+    windowTools.createItem('button', undefined, undefined, '添加')
   );
   let table2 = await createTable(
     2,
-    fabricAPI.windowTools.createItem('button', undefined, undefined, '写入'),
-    fabricAPI.windowTools.createItem('button', undefined, undefined, '读取'),
-    fabricAPI.windowTools.createItem('button', undefined, undefined, '添加')
+    windowTools.createItem('button', undefined, undefined, '写入'),
+    windowTools.createItem('button', undefined, undefined, '读取'),
+    windowTools.createItem('button', undefined, undefined, '添加')
   );
-  let disc = fabricAPI.windowTools.createItem('p', undefined, undefined, '使用方法,设置选项后并不会立刻保存，需点击写入才可以，所有资源下载进入才能加载。可以设置三种状态，删除将会在写入后移除，保存会在写入后保存在本地，禁用将不会启动。写入是将当前设置的写入到本地，这样设置的才起作用。');
-  let disc0 = fabricAPI.windowTools.createItem('p', undefined, undefined, '大多数js脚本都可以使用这个，它运行在界面加载后。');
-  let disc1 = fabricAPI.windowTools.createItem('p', undefined, undefined, '大多数css文件都可以使用这个，它的加载也在界面加载后。');
-  let disc2 = fabricAPI.windowTools.createItem('p', undefined, undefined, '下面设置的脚本，在界面加载时会运行，它在下次启动后会写入到缓存，即使删掉fabric也依旧会运行，这里的脚本下下次启动才能运行。');
+  let disc = windowTools.createItem('p', undefined, undefined, '添加脚本，写入后会覆盖之前写入的，所以要先读取，下次启动将注入最后一次写入的链接');
+  let disc0 = windowTools.createItem('p', undefined, undefined, '大多数js脚本适用，它运行在界面加载后。');
+  let disc1 = windowTools.createItem('p', undefined, undefined, '大多数css文件适用，它的加载也在界面加载后。');
+  let disc2 = windowTools.createItem('p', undefined, undefined, '下面设置的脚本，在界面加载时会运行，它在下次启动后会写入到缓存，即使删掉fabric也依旧会运行，这里的脚本下下次启动才能运行。');
   workSpace.append(disc, disc0, table0, disc1, table1, disc2, table2);
-  let fabiricMianWindow = fabricAPI.windowTools.createFabrcWindow('ingectorjsWindow', 300, workSpace, '设置注入的资源', 400);
+  let fabiricMianWindow = windowTools.createFabrcWindow('ingectorjsWindow', 300, workSpace, '设置注入的资源', 400);
   // 关闭窗口
-  fabricAPI.windowTools.closeElement(fabiricMianWindow);
+  windowTools.closeElement(fabiricMianWindow);
   console.log('窗口', fabiricMianWindow);
-  menuItem.onclick = () => { fabricAPI.windowTools.turnDisplay(fabiricMianWindow); };
-  fabricAPI.iiroseElements.movePanelHolder?.appendChild(fabiricMianWindow);
+  menuItem.onclick = () => { windowTools.turnDisplay(fabiricMianWindow); };
+  iiroseElements.movePanelHolder?.appendChild(fabiricMianWindow);
 
   // 返回控制它的二级菜单
   return menuItem;

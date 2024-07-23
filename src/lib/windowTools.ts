@@ -1,7 +1,8 @@
-import { fabricAPI } from "./fabricAPI";
-let api: any;
+import { fabricStyle } from "./fabricStyle";
+import { fabricSVG } from "./fabricSVG";
+import { iiroseElements } from "./iiroseElements";
+
 export const windowTools = {
-  api,
   /**
    * 创建标签元素
    * @param tag 标签类型
@@ -26,33 +27,33 @@ export const windowTools = {
    * @param height 窗口高
    * @returns 
    */
-  createFabrcWindow(id: string, width: number, workSpace: HTMLElement = windowTools.createItem('div', `${id}-workspace`, fabricAPI.fabricStyle.class["fabric-window-workspace"]), title: string = id, height: number = width / 4 * 3) {
+  createFabrcWindow(id: string, width: number, workSpace: HTMLElement = windowTools.createItem('div', `${id}-workspace`, fabricStyle.class["fabric-window-workspace"]), title: string = id, height: number = width / 4 * 3) {
     // 最外层窗口       
-    let fabricWindow = windowTools.createItem('div', id, fabricAPI.fabricStyle.class["fabric-window"]);
+    let fabricWindow = windowTools.createItem('div', id, fabricStyle.class["fabric-window"]);
     fabricWindow.style.width = `${width}px`;
     fabricWindow.style.height = `${height + 20}px`;
     // 菜单栏
     let menubar = windowTools.createItem('div');
-    menubar.classList.add(fabricAPI.fabricStyle.class["fabric-window-menubar"]);
+    menubar.classList.add(fabricStyle.class["fabric-window-menubar"]);
     // 标题栏
     let menubarTitle = windowTools.createItem('div');
-    menubarTitle.classList.add(fabricAPI.fabricStyle.class["fabric-window-menubartitle"]);
+    menubarTitle.classList.add(fabricStyle.class["fabric-window-menubartitle"]);
     menubarTitle.textContent = title;
     // 按键
     let minimizeButton = windowTools.createItem('div');
-    minimizeButton.classList.add(fabricAPI.fabricStyle.class["fabric-window-menubarbutton"]);
-    minimizeButton.innerHTML = fabricAPI.fabricSVG.min;
+    minimizeButton.classList.add(fabricStyle.class["fabric-window-menubarbutton"]);
+    minimizeButton.innerHTML = fabricSVG.min;
     let medimizeButton = windowTools.createItem('div');
-    medimizeButton.classList.add(fabricAPI.fabricStyle.class["fabric-window-menubarbutton"]);
-    medimizeButton.innerHTML = fabricAPI.fabricSVG.med;
+    medimizeButton.classList.add(fabricStyle.class["fabric-window-menubarbutton"]);
+    medimizeButton.innerHTML = fabricSVG.med;
     let maximizeButton = windowTools.createItem('div');
-    maximizeButton.classList.add(fabricAPI.fabricStyle.class["fabric-window-menubarbutton"]);
-    maximizeButton.innerHTML = fabricAPI.fabricSVG.max;
+    maximizeButton.classList.add(fabricStyle.class["fabric-window-menubarbutton"]);
+    maximizeButton.innerHTML = fabricSVG.max;
     let closeButton = windowTools.createItem('div');
-    closeButton.classList.add(fabricAPI.fabricStyle.class["fabric-window-menubarbutton"]);
-    closeButton.innerHTML = fabricAPI.fabricSVG.close;
+    closeButton.classList.add(fabricStyle.class["fabric-window-menubarbutton"]);
+    closeButton.innerHTML = fabricSVG.close;
     // 工作区
-    // let workSpace = windowTools.createItem(workspaceTag, `${id}-workspace`, fabricAPI.fabricStyle.class["fabric-window-workspace"]);
+    // let workSpace = windowTools.createItem(workspaceTag, `${id}-workspace`, fabricStyle.class["fabric-window-workspace"]);
     // 添加按键功能
     minimizeButton.addEventListener('click', () => {
       windowTools.closeElement(fabricWindow);
@@ -186,19 +187,16 @@ export const windowTools = {
       windowTools.turnDisplay(functionItemBox);
     });
     // 更新列表
-    fabricAPI.iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
+    iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
     if (isbefore) {
       console.log('添加菜单', Menu);
-      fabricAPI.iiroseElements.functionButtonGroupList![num].before(Menu);
-      fabricAPI.iiroseElements.functionButtonGroupList![num].before(functionItemBox);
+      iiroseElements.functionButtonGroupList![num].before(Menu);
+      iiroseElements.functionButtonGroupList![num].before(functionItemBox);
     } else {
-      fabricAPI.iiroseElements.functionButtonGroupList![num].after(functionItemBox);
-      fabricAPI.iiroseElements.functionButtonGroupList![num].after(Menu);
+      iiroseElements.functionButtonGroupList![num].after(functionItemBox);
+      iiroseElements.functionButtonGroupList![num].after(Menu);
     }
     // 插入完成后也更新一下
-    fabricAPI.iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
-  },
-  async addAPI(tempAPI: any) {
-    api = tempAPI;
+    iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
   }
 }

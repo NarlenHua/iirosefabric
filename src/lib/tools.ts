@@ -1,8 +1,5 @@
-import { FabricAPI } from "./fabricAPI";
-
-let api: any;
+import { iiroseElements } from "./iiroseElements";
 export const tools = {
-    api,
     /**
  * 异步延时函数
  * @param {时间毫秒} ms
@@ -30,12 +27,8 @@ export const tools = {
     },
     // 刷新记录fabric记录的一些元素
     async refreshElements() {
-        api as FabricAPI
-        api.iiroseElements.movePanelHolder = document.querySelector('#movePanelHolder');
-        api.iiroseElements.functionHolder = document.querySelector('#functionHolder');
-        api.iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
-    },
-    async addAPI(tempAPI: any) {
-        api = tempAPI;
+        iiroseElements.movePanelHolder = document.querySelector('#movePanelHolder');
+        iiroseElements.functionHolder = document.querySelector('#functionHolder');
+        iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
     }
 }
