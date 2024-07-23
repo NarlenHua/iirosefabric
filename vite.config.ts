@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
-// import { resolve } from 'path'
-// import dts from 'vite-plugin-dts'
+
 
 export default defineConfig({
   css: {
@@ -9,20 +8,18 @@ export default defineConfig({
     }
   },
   build: {
+    // 打包到火狐浏览器
+    // target: 'firefox78',
     minify: 'terser',
     terserOptions: {
       // 删除所有注释，包括 license 注释
       format: {
-        comments: false
+        comments: false,
       },
       compress: {
         // 删除命令台输出
-        drop_console: true,
-        drop_debugger: true,
-        // 保留类名
-        // keep_classnames: true,
-        // 保留函数名
-        // keep_fnames: true,
+        // drop_console: true,
+        // drop_debugger: true,
       }
     },
     rollupOptions: {
@@ -37,13 +34,5 @@ export default defineConfig({
         entryFileNames: '[name].js', // 入口文件命名格式  
       },
     },
-    // 配置生成.d.ts文件
-    // lib: {
-    //   entry: resolve(__dirname, 'src/lib/fabricAPI.ts'),
-    //   name: 'MyLib',
-    //   formats: ['es'],
-    //   fileName: 'fabricAPI'
-    // }
   },
-  // plugins: [dts({ rollupTypes: true })]
 })

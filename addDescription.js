@@ -28,6 +28,8 @@ readFile(inputFilePath, 'utf8', (err, data) => {
 
   // 在文件内容之前添加字符串  
   // const newData = prependString + data;
+  // 将代码包裹进立即执行函数中
+  data = `(async function () { ${data}})()`
   const newData = data;
 
   // 异步写入新文件  
@@ -36,7 +38,13 @@ readFile(inputFilePath, 'utf8', (err, data) => {
       console.error('写入文件时出错:', err);
       return;
     }
-
     console.log('文件已成功处理并保存到：', outputFilePath);
+  });
+  writeFile(inputFilePath, newData, 'utf8', (err) => {
+    if (err) {
+      console.error('写入文件时出错:', err);
+      return;
+    }
+    console.log('文件已成功处理并保存到：', inputFilePath);
   });
 });

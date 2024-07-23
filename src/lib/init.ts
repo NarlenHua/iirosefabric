@@ -217,8 +217,7 @@ async function initMainWindow() {
 let fabricAPI: FabricAPI = new FabricAPI();
 // 初始化
 async function initFabricAPI() {
-    // 先等待网络连接好
-    await initSocket();
+
     // 初始化一些静态的成员
     fabricAPI.version = config.version;
     fabricAPI.fabricSVG = fabricSVG;
@@ -232,6 +231,11 @@ async function initFabricAPI() {
     fabricAPI.ingector = ingector;
     // 初始化动态的成员
     await initIirsoeElements();
+    // 先等待网络连接好
+    await initSocket();
+    // 初始化后再写入
+    fabricAPI.fabricSocket = fabricSocket;
+    fabricAPI.iiroseElements = iiroseElements;
     // 注入CSS
     await tools.addStyle('fabricStyle', fabricStyle.fabricCSS);
     await tools.addStyle('ingectorStyle', ingector.ingectorStyle.ingectorCSS);
