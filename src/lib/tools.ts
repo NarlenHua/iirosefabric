@@ -30,8 +30,12 @@ export const tools = {
     },
     // 刷新记录fabric记录的一些元素
     async refreshElements() {
-        fabricAPI.iiroseElements.movePanelHolder = document.querySelector('#movePanelHolder');
-        fabricAPI.iiroseElements.functionHolder = document.querySelector('#functionHolder');
-        fabricAPI.iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
+        api as FabricAPI
+        api.iiroseElements.movePanelHolder = document.querySelector('#movePanelHolder');
+        api.iiroseElements.functionHolder = document.querySelector('#functionHolder');
+        api.iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
+    },
+    async addAPI(tempAPI: any) {
+        api = tempAPI;
     }
 }

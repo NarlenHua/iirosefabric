@@ -37,15 +37,19 @@ export class FabricAPI {
   } = fabricStyle;
   messageClass = messageClass;
   encoder = encoder;
-  decoder: {
-    decodeMessage(_message: any): any,
-  } = decoder;
+  decoder: { decodeMessage(_message: any): any } = decoder;
   emitter = new TinyEmitter();
   iiroseElements: {
     movePanelHolder: HTMLElement | null,
     functionHolder: HTMLElement | null,
     functionButtonGroupList: Element[] | null
   } = iirsoeElements;
+  tools: {
+    api: any;
+    sleep(_ms: number): any,
+    addStyle(id: string, css: string): Promise<boolean>,
+    refreshElements(): any,
+  } = tools;
   windowTools: {
     /**
  * 创建标签
@@ -102,11 +106,6 @@ export class FabricAPI {
     insertMenu(Menu: HTMLElement, items: HTMLElement[], num: number, isbefore: boolean): void,
 
   } = windowTools;
-  tools: {
-    sleep(_ms: number): any,
-    addStyle(id: string, css: string): Promise<boolean>,
-    refreshElements(): any,
-  } = tools;
   ingector: {
     ingectorStyle: {
       ingectorCSS: string;

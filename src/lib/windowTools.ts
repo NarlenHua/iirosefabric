@@ -1,5 +1,7 @@
 import { fabricAPI } from "./fabricAPI";
+let api: any;
 export const windowTools = {
+  api,
   /**
    * 创建标签元素
    * @param tag 标签类型
@@ -195,5 +197,8 @@ export const windowTools = {
     }
     // 插入完成后也更新一下
     fabricAPI.iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
+  },
+  async addAPI(tempAPI: any) {
+    api = tempAPI;
   }
 }
