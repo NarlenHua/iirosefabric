@@ -1,14 +1,11 @@
+let movePanelHolder: HTMLElement | null = document.querySelector('#movePanelHolder');
+let functionHolder: HTMLElement | null = document.querySelector('#functionHolder');
+let functionButtonGroupList: Element[] | null = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
 
-
-export class IirsoeElements {
-    movePanelHolder!: HTMLElement | null;
-    functionHolder!: HTMLElement | null;
-    functionButtonGroupList!: Element[] | null;
-    async initElements() {
-        this.movePanelHolder = document.querySelector('#movePanelHolder');
-        this.functionHolder = document.querySelector('#functionHolder');
-        this.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
-    }
+export const iirsoeElements = {
+    movePanelHolder,
+    functionHolder,
+    functionButtonGroupList
 }
 
 

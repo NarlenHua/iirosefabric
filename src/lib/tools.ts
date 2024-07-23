@@ -1,0 +1,41 @@
+import { fabricAPI } from "./fabricAPI";
+
+/**
+ * 异步延时函数
+ * @param {时间毫秒} ms
+ */
+async function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+/**
+ * 添加样式
+ * @param id style元素id
+ * @param css 样式文件
+ * @returns 添加成功返回true否则返回false
+ */
+async function addStyle(id: string, css: string): Promise<boolean> {
+    try {
+        console.log('添加样式', id);
+        let st = document.createElement('style');
+        st.id = id;
+        st.innerHTML = css;
+        document.head.appendChild(st);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+// 刷新记录fabric记录的一些元素
+async function refreshElements() {
+    fabricAPI.iiroseElements.movePanelHolder = document.querySelector('#movePanelHolder');
+    fabricAPI.iiroseElements.functionHolder = document.querySelector('#functionHolder');
+    fabricAPI.iiroseElements.functionButtonGroupList = [...document.querySelectorAll('.functionButton.functionButtonGroup')];
+}
+
+
+export const tools = {
+    sleep,
+    addStyle,
+    refreshElements
+}

@@ -1,5 +1,5 @@
-export namespace MessageClass {
-  export class PublicMessage {
+export const messageClass = {
+  PublicMessage: class {
     timeStamp: string
     headPortrait: string
     name: string
@@ -22,8 +22,8 @@ export namespace MessageClass {
         this.messageUid = message_list[10],
         this.messageClass = "PublicMessage"
     }
-  }
-  export class PrivateMessage {
+  },
+  PrivateMessage: class {
     timeStamp: string
     headPortrait: string
     name: string
@@ -44,8 +44,8 @@ export namespace MessageClass {
         this.messageUid = message_list[10],
         this.messageClass = "PrivateMessage"
     }
-  }
-  export class HiddenMessage {
+  },
+  HiddenMessage: class {
     messageName: string
     uid: string
     data: string
@@ -60,8 +60,8 @@ export namespace MessageClass {
       this.data = (temp == null) ? '' : temp[0];
       this.messageClass = 'HidenMessage';
     }
-  }
-  export class UnkonwMessage {
+  },
+  UnkonwMessage: class {
     message: string
     messageClass: string
     constructor(message: string) {

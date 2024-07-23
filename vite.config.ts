@@ -1,4 +1,6 @@
 import { defineConfig } from 'vite'
+import { resolve } from 'path'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
   css: {
@@ -13,11 +15,10 @@ export default defineConfig({
       format: {
         comments: false
       },
-
       compress: {
         // 删除命令台输出
-        drop_console: true,
-        drop_debugger: true,
+        // drop_console: true,
+        // drop_debugger: true,
         // 保留类名
         keep_classnames: true,
         // 保留函数名
@@ -36,5 +37,13 @@ export default defineConfig({
         entryFileNames: '[name].js', // 入口文件命名格式  
       },
     },
+    // 配置生成.d.ts文件
+    lib: {
+      entry: resolve(__dirname, 'src/lib/fabricAPI.ts'),
+      name: 'MyLib',
+      formats: ['es'],
+      fileName: 'fabricAPI'
+    }
   },
+  plugins: [dts({ rollupTypes: true })]
 })
